@@ -1,238 +1,115 @@
 import { openWhatsApp, WA_MESSAGES } from '../lib/whatsapp';
 
+const WaIcon = () => (
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+    <path d="M12 0C5.373 0 0 5.373 0 12c0 2.125.557 4.118 1.531 5.845L.057 23.57a.5.5 0 0 0 .612.612l5.725-1.474A11.951 11.951 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22a9.951 9.951 0 0 1-5.076-1.384l-.363-.215-3.76.968.988-3.614-.236-.376A9.952 9.952 0 0 1 2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/>
+  </svg>
+);
+
+const stats = [
+  { value: '10,000+', label: 'Live Channels' },
+  { value: '15+', label: 'Premium Servers' }, // Updated to showcase your larger network
+  { value: '99.9%', label: 'Uptime' },
+  { value: '4K/8K', label: 'Ultra HD Quality' },
+];
+
 export default function Hero() {
   return (
     <>
       <section className="hero">
-        <div className="hero-bg" />
-        <div className="hero-content">
-          <p className="hero-eyebrow">The Greatest</p>
-          <h1 className="hero-title">
-            All In One<br />
-            <span className="accent">Place</span>
-          </h1>
-          <p className="hero-sub">Watch unlimited movies, TV shows, and much more</p>
-
+        <div className="hero-glow" aria-hidden="true" />
+        <div className="hero-glow-2" aria-hidden="true" />
+        <div className="hero-inner">
+          <div className="hero-badge"><span className="badge-dot" />Live Streaming Available Now</div>
+          <h1 className="hero-title">Stream <span className="gradient-text">Everything</span><br />You Love</h1>
+          <p className="hero-desc">Premium IPTV with StarShare, 5G Live, Opplex, and elite 4K servers. Thousands of live channels, movies, and shows in uncompressed quality.</p>
           <div className="hero-actions">
-            <button
-              className="btn-free-trial"
-              onClick={() => openWhatsApp(WA_MESSAGES.freeTrial)}
-            >
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
-              </svg>
-              Free Trial
-            </button>
-            <span className="arrow-label">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
-                <path d="M5 12h14M12 5l7 7-7 7"/>
-              </svg>
-              Start your 1 day free trial
-            </span>
+            <button className="btn-wa" onClick={() => openWhatsApp(WA_MESSAGES.freeTrial)}><WaIcon />Start Free Trial</button>
+            <a href="#plans" className="btn-ghost">View Plans <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
           </div>
-        </div>
-
-        {/* Decorative TV/device mockup */}
-        <div className="hero-visual">
-          <div className="tv-frame">
-            <div className="tv-screen">
-              <div className="screen-content">
-                <div className="play-icon">▶</div>
-                <div className="channel-bar">
-                  <span className="live-dot" />
-                  LIVE • HD
-                </div>
+          <div className="hero-stats">
+            {stats.map((s) => (
+              <div key={s.label} className="stat">
+                <span className="stat-value">{s.value}</span>
+                <span className="stat-label">{s.label}</span>
               </div>
-            </div>
-            <div className="tv-stand" />
+            ))}
           </div>
         </div>
 
-        {/* Decorative lines */}
-        <div className="deco-lines">
-          {[...Array(6)].map((_, i) => (
-            <div key={i} className="deco-line" style={{ animationDelay: `${i * 0.3}s` }} />
-          ))}
+        {/* --- Multi-Column Advanced Decoloration Grid --- */}
+        <div className="hero-deco" aria-hidden="true">
+          {/* Column 1 */}
+          <div className="deco-col">
+            {[
+              { name: 'StarShare', delay: '0s', offset: '-10px' },
+              { name: 'Opplex', delay: '0.4s', offset: '5px' },
+              { name: 'B1G 4K', delay: '0.8s', offset: '-5px' },
+              { name: 'Dream8K', delay: '1.2s', offset: '10px' }
+            ].map((s) => (
+              <div key={s.name} className="deco-card" style={{ animationDelay: s.delay, transform: `translateX(${s.offset})` }}>
+                <div className="deco-dot" /><span>{s.name}</span><span className="deco-live">LIVE</span>
+              </div>
+            ))}
+          </div>
+
+          {/* Column 2 (Offsets visually to create a zigzag modern dashboard effect) */}
+          <div className="deco-col col-offset">
+            {[
+              { name: '5G Live', delay: '0.2s', offset: '5px' },
+              { name: 'MegaOTT', delay: '0.6s', offset: '-8px' },
+              { name: 'CrystalOtt', delay: '1.0s', offset: '12px' },
+              { name: 'Cobra TV', delay: '1.4s', offset: '-3px' }
+            ].map((s) => (
+              <div key={s.name} className="deco-card secondary-card" style={{ animationDelay: s.delay, transform: `translateX(${s.offset})` }}>
+                <div className="deco-dot pulse-blue" /><span>{s.name}</span><span className="deco-live ready">READY</span>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
       <style jsx>{`
-        .hero {
-          position: relative;
-          min-height: 88vh;
-          display: flex;
-          align-items: center;
-          overflow: hidden;
-          padding: 4rem 2rem;
-        }
-        .hero-bg {
-          position: absolute;
-          inset: 0;
-          background:
-            radial-gradient(ellipse 60% 50% at 70% 50%, rgba(229,9,20,0.08) 0%, transparent 70%),
-            radial-gradient(ellipse 40% 60% at 20% 80%, rgba(229,9,20,0.05) 0%, transparent 60%);
-          pointer-events: none;
-        }
-        .hero-content {
-          position: relative;
-          z-index: 2;
-          max-width: 1200px;
-          margin: 0 auto;
-          width: 100%;
-        }
-        .hero-eyebrow {
-          font-family: var(--font-display);
-          font-size: clamp(18px, 3vw, 26px);
-          letter-spacing: 6px;
-          color: var(--accent);
-          margin-bottom: 0.5rem;
-          text-transform: uppercase;
-        }
-        .hero-title {
-          font-family: var(--font-display);
-          font-size: clamp(72px, 12vw, 140px);
-          line-height: 0.9;
-          letter-spacing: 3px;
-          color: #fff;
-          margin-bottom: 1.5rem;
-        }
-        .accent { color: var(--accent); }
-        .hero-sub {
-          font-size: clamp(15px, 2vw, 18px);
-          color: var(--text-secondary);
-          margin-bottom: 2.5rem;
-          font-weight: 300;
-          letter-spacing: 0.5px;
-        }
-        .hero-actions {
-          display: flex;
-          align-items: center;
-          gap: 1.5rem;
-          flex-wrap: wrap;
-        }
-        .btn-free-trial {
-          display: inline-flex;
-          align-items: center;
-          gap: 10px;
-          background: var(--wa-green);
-          color: #fff;
-          font-size: 16px;
-          font-weight: 600;
-          padding: 14px 32px;
-          border-radius: 4px;
-          letter-spacing: 0.5px;
-          transition: background 0.2s, transform 0.2s;
-        }
-        .btn-free-trial:hover {
-          background: var(--wa-green-dark);
-          transform: translateY(-1px);
-        }
-        .arrow-label {
-          display: flex;
-          align-items: center;
-          gap: 8px;
-          color: var(--text-secondary);
-          font-size: 14px;
-          font-weight: 300;
-          letter-spacing: 0.5px;
-        }
-
-        /* TV Visual */
-        .hero-visual {
-          position: absolute;
-          right: 5%;
-          top: 50%;
-          transform: translateY(-50%);
-          z-index: 1;
-          opacity: 0.18;
-          pointer-events: none;
-        }
-        .tv-frame {
-          width: 320px;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-        }
-        .tv-screen {
-          width: 100%;
-          aspect-ratio: 16/10;
-          background: #111;
-          border: 3px solid rgba(255,255,255,0.2);
-          border-radius: 8px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          position: relative;
-          overflow: hidden;
-        }
-        .screen-content {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          gap: 12px;
-        }
-        .play-icon {
-          font-size: 48px;
-          color: var(--accent);
-        }
-        .channel-bar {
-          display: flex;
-          align-items: center;
-          gap: 6px;
-          font-size: 13px;
-          color: #fff;
-          background: rgba(229,9,20,0.6);
-          padding: 4px 12px;
-          border-radius: 2px;
-        }
-        .live-dot {
-          width: 7px;
-          height: 7px;
-          background: #fff;
-          border-radius: 50%;
-          animation: pulse 1.5s ease-in-out infinite;
-        }
-        .tv-stand {
-          width: 40px;
-          height: 20px;
-          background: rgba(255,255,255,0.15);
-          clip-path: polygon(20% 0%, 80% 0%, 100% 100%, 0% 100%);
-          margin-top: 2px;
-        }
-
-        /* Deco lines */
-        .deco-lines {
-          position: absolute;
-          right: 0;
-          top: 0;
-          bottom: 0;
-          width: 200px;
-          display: flex;
-          gap: 18px;
-          padding: 0 20px;
-          pointer-events: none;
-          z-index: 0;
-        }
-        .deco-line {
-          flex: 1;
-          background: linear-gradient(to bottom, transparent, rgba(229,9,20,0.15), transparent);
-          animation: linePulse 3s ease-in-out infinite;
-        }
-
-        @keyframes pulse {
-          0%, 100% { opacity: 1; }
-          50% { opacity: 0.3; }
-        }
-        @keyframes linePulse {
-          0%, 100% { opacity: 0.3; }
-          50% { opacity: 1; }
-        }
-
-        @media (max-width: 768px) {
-          .hero-visual { display: none; }
-          .deco-lines { display: none; }
-          .hero { min-height: 70vh; }
-        }
+        .hero { position:relative;overflow:hidden;min-height:92vh;display:flex;align-items:center;padding:5rem 2rem 4rem; }
+        .hero-glow { position:absolute;top:-20%;left:-10%;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(124,58,237,0.2) 0%,transparent 70%);pointer-events:none; }
+        .hero-glow-2 { position:absolute;bottom:-10%;right:5%;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(6,182,212,0.12) 0%,transparent 70%);pointer-events:none; }
+        .hero-inner { position:relative;z-index:2;max-width:1200px;margin:0 auto;width:100%; }
+        .hero-badge { display:inline-flex;align-items:center;gap:8px;background:rgba(124,58,237,0.12);border:1px solid rgba(124,58,237,0.3);color:#a78bfa;font-size:13px;font-weight:500;padding:6px 14px;border-radius:50px;margin-bottom:1.5rem;letter-spacing:0.3px; }
+        .badge-dot { width:7px;height:7px;background:#4ade80;border-radius:50%;animation:pulse 2s ease-in-out infinite; }
+        @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.5;transform:scale(1.3)}}
+        .hero-title { font-family:var(--font-display);font-size:clamp(52px,9vw,100px);font-weight:800;line-height:1;letter-spacing:-2px;margin-bottom:1.5rem;max-width:700px; }
+        .gradient-text { background:var(--gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text; }
+        .hero-desc { font-size:clamp(15px,2vw,18px);color:var(--text-secondary);font-weight:300;line-height:1.75;max-width:520px;margin-bottom:2.5rem; }
+        .hero-actions { display:flex;align-items:center;gap:1rem;flex-wrap:wrap;margin-bottom:3.5rem; }
+        .btn-wa { display:inline-flex;align-items:center;gap:10px;background:var(--wa-green);color:#fff;font-size:15px;font-weight:600;padding:14px 28px;border-radius:8px;border:none;transition:background 0.2s,transform 0.2s;cursor:pointer; }
+        .btn-wa:hover { background:var(--wa-green-dark);transform:translateY(-2px); }
+        .btn-ghost { display:inline-flex;align-items:center;gap:8px;color:var(--text-secondary);font-size:15px;font-weight:500;border:1px solid var(--border-hover);padding:13px 24px;border-radius:8px;transition:all 0.2s; }
+        .btn-ghost:hover { color:#fff;border-color:rgba(255,255,255,0.3); }
+        .hero-stats { display:flex;gap:2.5rem;flex-wrap:wrap; }
+        .stat { display:flex;flex-direction:column;gap:2px; }
+        .stat-value { font-family:var(--font-display);font-size:28px;font-weight:800;background:var(--gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text; }
+        .stat-label { font-size:12px;color:var(--text-muted);letter-spacing:0.5px;text-transform:uppercase; }
+        
+        /* --- Expanded Layout Configuration --- */
+        .hero-deco { position:absolute;right:2%;top:50%;transform:translateY(-50%);display:flex;gap:1.25rem;z-index:1; }
+        .deco-col { display:flex;flex-direction:column;gap:1rem; }
+        .col-offset { margin-top: 2rem; } /* Gives alternating alignment layout */
+        
+        .deco-card { display:flex;align-items:center;gap:10px;background:rgba(16,16,42,0.85);border:1px solid var(--border);padding:12px 18px;border-radius:10px;font-size:14px;font-weight:500;backdrop-filter:blur(8px);animation:float 4s ease-in-out infinite;white-space:nowrap;width:170px; }
+        .secondary-card { border-color: rgba(6,182,212,0.15); }
+        
+        @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+        .deco-dot { width:8px;height:8px;background:#4ade80;border-radius:50%;flex-shrink:0; }
+        .pulse-blue { background: #06b6d4; }
+        
+        .deco-live { margin-left:auto;font-size:10px;letter-spacing:1.5px;color:#4ade80;font-weight:600; }
+        .deco-live.ready { color: #06b6d4; }
+        
+        /* Responsive Fixes */
+        @media(max-width:1150px){ .hero-deco{ transform: translateY(-50%) scale(0.85); right: -2%; } }
+        @media(max-width:980px){ .hero-deco{display:none;} }
+        @media(max-width:480px){ .hero-stats{gap:1.5rem;} .hero-title{letter-spacing:-1px;} }
       `}</style>
     </>
   );
