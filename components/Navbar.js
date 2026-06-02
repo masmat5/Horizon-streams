@@ -1,16 +1,10 @@
 import { useState } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/router'; // 1. Import Router
 import { openWhatsApp, WA_MESSAGES } from '../lib/whatsapp';
+import { FreeTrialPage } from '../pages/free_trial';
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const router = useRouter(); // 2. Initialize router
-
-  const handleFreeTrialClick = () => {
-    router.push('./free_trial.js'); // 3. Programmatic Navigation
-  };
-
   return (
     <>
       <nav className="navbar">
@@ -23,9 +17,10 @@ export default function Navbar() {
             <Link href="/reseller" className="nav-link">Reseller</Link>
           </div>
           <div className="nav-actions desktop">
-            {/* Call the router handler here */}
-            <button onClick={handleFreeTrialClick} className="btn-trial">Free Trial</button>
-          </div>
+  <Link href="/free_trial" className="btn-trial">
+    Free Trial
+  </Link>
+</div>
           <button className="hamburger" onClick={() => setMenuOpen(!menuOpen)} aria-label="Toggle menu">
             <span className={menuOpen ? 'open' : ''} /><span className={menuOpen ? 'open' : ''} /><span className={menuOpen ? 'open' : ''} />
           </button>
@@ -36,11 +31,10 @@ export default function Navbar() {
             <Link href="/#plans" className="mobile-link" onClick={() => setMenuOpen(false)}>Plans</Link>
             <Link href="/latest-news" className="mobile-link" onClick={() => setMenuOpen(false)}>Latest News</Link>
             <Link href="/reseller" className="mobile-link" onClick={() => setMenuOpen(false)}>Reseller Panel</Link>
-            <button onClick={() => { handleFreeTrialClick(); setMenuOpen(false); }} className="mobile-cta">🎬 Start Free Trial</button>
+            <button onClick={() => { openWhatsApp(WA_MESSAGES.freeTrial); setMenuOpen(false); }} className="mobile-cta">🎬 Start Free Trial</button>
           </div>
         )}
       </nav>
-      {/* CSS styles baseline stays same as your original file */}
       <style jsx>{`
         .navbar { position:sticky;top:0;z-index:100;background:rgba(6,6,15,0.93);backdrop-filter:blur(16px);border-bottom:1px solid var(--border); }
         .nav-inner { max-width:1200px;margin:0 auto;padding:0.9rem 2rem;display:flex;align-items:center;gap:2rem; }
