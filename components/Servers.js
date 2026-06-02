@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { openWhatsApp, WA_MESSAGES } from '../lib/whatsapp';
 
 const servers = [
+  // --- EXISTING SERVERS ---
   { name: 'StarShare', tag: 'Sports & Global', desc: 'Premium sports, international news, and global entertainment from around the world in HD quality.', waMsg: WA_MESSAGES.starShare, color: '#f59e0b', icon: '⭐', category: 'sports', badge: '🔥 Most Popular' },
   { name: '5G Live', tag: 'Ultra Low Latency', desc: 'Blazing fast buffer-free live streaming optimized for high-speed internet connections.', waMsg: WA_MESSAGES.fiveGLive, color: '#10b981', icon: '⚡', category: 'hd', badge: '⚡ Low Latency' },
   { name: 'Opplex', tag: 'Entertainment Hub', desc: 'Thousands of VOD titles, full TV seasons, Bollywood, Hollywood, and kids content.', waMsg: WA_MESSAGES.opplex, color: '#7c3aed', icon: '🎬', category: 'movies', badge: '👑 Local Favorite' },
@@ -11,16 +12,24 @@ const servers = [
   { name: 'MegaOTT', tag: 'Massive Library', desc: 'Huge collection of global channels and updated movie catalogs daily.', waMsg: WA_MESSAGES.megaott, color: '#ef4444', icon: '🚀', category: 'movies', badge: '📈 Daily Updated' },
   { name: 'ExtraOTT', tag: 'Extended VIP', desc: 'Exclusive access to premium backup sources, premium feeds, and rare networks.', waMsg: WA_MESSAGES.extraott, color: '#84cc16', icon: '💎', category: 'sports', badge: '⭐ VIP Line' },
   { name: 'Sansat', tag: 'Smooth Streaming', desc: 'Highly optimized compression algorithms for seamless streaming even on low speeds.', waMsg: WA_MESSAGES.sansat, color: '#a855f7', icon: '📡', category: 'budget', badge: '✅ Low Internet' },
-  { name: 'Casper', tag: 'Ghost Speed', desc: 'Lightweight and hyper-fast connection servers designed for older devices.', waMsg: WA_MESSAGES.casper, color: '#6366f1', icon: '👻', category: 'budget', badge: '🛡️ Light Weight' },
+  { name: 'Casper', tag: 'Ghost Speed', desc: 'Lightweight and hyper-fast connection servers designed for older devices.', waMsg: WA_MESSAGES.casper, color: '#6366f1', icon: 'ghost', category: 'budget', badge: '🛡️ Light Weight' },
   { name: 'DH Plus', tag: 'Premium Access', desc: 'Digital Hybrid technology featuring elite packages and zero downtime.', waMsg: WA_MESSAGES.dhPlus, color: '#f43f5e', icon: '👑', category: 'sports', badge: '⚡ No Buffer' },
   { name: 'DoomTV', tag: 'Action & Live', desc: 'High frame-rate streaming dedicated to intense live broadcasts and continuous feeds.', waMsg: WA_MESSAGES.doomtv, color: '#ea580c', icon: '🔥', category: 'sports', badge: '🎯 60 FPS' },
   { name: 'Dino', tag: 'Classic Stable', desc: 'Time-tested legacy servers offering unmatched stability and consistent uptimes.', waMsg: WA_MESSAGES.dino, color: '#14b8a6', icon: '🦖', category: 'budget', badge: '🔒 Ultra Stable' },
   { name: 'CrystalOtt', tag: 'Pure Clarity', desc: 'Impeccable pixel-perfect delivery for high-end audio and video systems.', waMsg: WA_MESSAGES.crystalOtt, color: '#22d3ee', icon: '❄️', category: 'hd', badge: '🍿 Home Cinema' },
-  { name: 'Cobra', tag: 'Striking Speeds', desc: 'Aggressive content routing ensures instant channel switching with no delay.', waMsg: WA_MESSAGES.cobra, color: '#22c55e', icon: '🐍', category: 'movies', badge: '⚡ Fast Zapping' }
+  { name: 'Cobra', tag: 'Striking Speeds', desc: 'Aggressive content routing ensures instant channel switching with no delay.', waMsg: WA_MESSAGES.cobra, color: '#22c55e', icon: '🐍', category: 'movies', badge: '⚡ Fast Zapping' },
+
+  // --- NEWLY ADDED SERVERS ---
+  { name: 'Strong4K', tag: 'Heavy Duty 4K', desc: 'Rock-solid content delivery network designed exclusively to run high bit-rate 4K content flawlessly.', waMsg: WA_MESSAGES.strong4k || 'Hello HorizonStream IPTV! I want to know more about Strong4K Server.', color: '#ff4500', icon: '💪', category: 'hd', badge: '🏆 Elite Ultra' },
+  { name: 'Golden OTT', tag: 'Prestige VOD', desc: 'Premium cinematic gateway loaded with award-winning television series and gold-standard cinema catalogs.', waMsg: WA_MESSAGES.goldenOtt || 'Hello HorizonStream IPTV! I want to know more about Golden OTT Server.', color: '#dfb71a', icon: '🏆', category: 'movies', badge: '🔱 Golden VIP' },
+  { name: 'Smart4K', tag: 'AI Optimized HD', desc: 'Intelligent resource allocation servers that adapt dynamically to prevent sudden packet losses.', waMsg: WA_MESSAGES.smart4k || 'Hello HorizonStream IPTV! I want to know more about Smart4K Server.', color: '#00f5ff', icon: '🧠', category: 'hd', badge: '✨ Pure Crystal' },
+  { name: 'GloTV', tag: 'International Pack', desc: 'Broadcasting extensive multi-language networks directly from European, UK, and American satellite systems.', waMsg: WA_MESSAGES.glotv || 'Hello HorizonStream IPTV! I want to know more about GloTV Server.', color: '#38bdf8', icon: '🌐', category: 'sports', badge: '✈️ Worldwide Live' },
+  { name: 'Spice4K', tag: 'Desi Regional', desc: 'Unmatched coverage of premium Asian networks, native drama soaps, and subcontinental sports streams.', waMsg: WA_MESSAGES.spice4k || 'Hello HorizonStream IPTV! I want to know more about Spice4K Server.', color: '#f97316', icon: '🌶️', category: 'movies', badge: '💥 Best For Families' },
+  { name: 'Trex', tag: 'Apex Performance', desc: 'Monster-grade computing backbones optimized to withstand massive traffic during major world cups.', waMsg: WA_MESSAGES.trex || 'Hello HorizonStream IPTV! I want to know more about Trex Server.', color: '#059669', icon: '🦖', category: 'sports', badge: '🛡️ Anti-Freeze Pro' }
 ];
 
 const categories = [
-  { id: 'all', name: 'All Servers (15)' },
+  { id: 'all', name: 'All Servers (21)' }, // Scaled token up dynamically
   { id: 'sports', name: '⚽ Sports Special' },
   { id: 'movies', name: '🍿 Movies & Series' },
   { id: 'hd', name: '💎 4K / 8K Ultra HD' },
@@ -44,7 +53,7 @@ export default function Servers() {
             <p className="section-sub">All premium servers are integrated smoothly. Select a category below to filter the servers optimized for your entertainment requirements.</p>
           </div>
 
-          {/* NEW: Filter Tabs Component to reduce sensory overload */}
+          {/* Filter Tabs Component */}
           <div className="filter-tabs">
             {categories.map((cat) => (
               <button 
@@ -69,7 +78,6 @@ export default function Servers() {
               >
                 <div className="card-glow" style={{ background: `radial-gradient(circle at top left, ${s.color}20, transparent 70%)` }} />
                 
-                {/* Micro-badge added for high click potential */}
                 {s.badge && (
                   <div className="server-status-badge" style={{ color: s.color, background: `${s.color}15` }}>
                     {s.badge}
