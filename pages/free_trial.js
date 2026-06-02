@@ -1,7 +1,120 @@
+import { useState, useEffect, useRef } from 'react';
 import Head from 'next/head';
 import { openWhatsApp, WA_MESSAGES } from '../lib/whatsapp';
 
+// Clean embedding-allowed YouTube IDs stack
+const YOUTUBE_IDS = [
+  "9rHXfnT4sBI",
+  "hCzwv9RPLkE",
+  "YGJPYh713d0",
+  "PD-zh2omR_A",
+  "ifIrIfGkhzM"
+];
+
 export default function FreeTrialPage() {
+  const [currentTrack, setCurrentTrack] = useState(0);
+  const [apiReady, setApiReady] = useState(false);
+  const [isMuted, setIsMuted] = useState(true);
+  const playerRef = useRef(null);
+
+  // Load official YouTube Iframe Player API asynchronously
+  useEffect(() => {
+    if (!window.YT) {
+      const tag = document.createElement('script');
+      tag.src = 'https://www.youtube.com/iframe_api';
+      const firstScriptTag = document.getElementsByTagName('script')[0];
+      firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+      
+      window.onYouTubeIframeAPIReady = () => {
+        setApiReady(true);
+      };
+    } else {
+      setApiReady(true);
+    }
+  }, []);
+
+  // Re-initialize player nodes whenever array index transitions occur
+  useEffect(() => {
+    if (!apiReady) return;
+
+    if (playerRef.current && typeof playerRef.current.destroy === 'function') {
+      try {
+        playerRef.current.destroy();
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    // Fixed: Added absolute hosting origin headers to prevent domain restriction blocks
+    const currentOrigin = typeof window !== 'undefined' ? window.location.origin : '';
+
+    playerRef.current = new window.YT.Player('youtube-embedded-stream', {
+      videoId: YOUTUBE_IDS[currentTrack],
+      playerVars: {
+        autoplay: 1,
+        mute: isMuted ? 1 : 0,
+        controls: 0,
+        rel: 0,
+        showinfo: 0,
+        modestbranding: 1,
+        iv_load_policy: 3,
+        playsinline: 1,
+        fs: 0,
+        origin: currentOrigin // Bypasses cross-origin block restrictions
+      },
+      events: {
+        onReady: (event) => {
+          event.target.playVideo();
+          if (!isMuted) {
+            event.target.unMute();
+            event.target.setVolume(100);
+          } else {
+            event.target.mute();
+          }
+        },
+        onStateChange: (event) => {
+          if (event.data === window.YT.PlayerState.ENDED) {
+            handleVideoEnded();
+          }
+        },
+        onError: (event) => {
+          // CRITICAL: If any video is restricted/disabled by owner, auto-skip instantly
+          console.log("Video restricted or broken, skipping to next track automatically.");
+          handleVideoEnded();
+        }
+      }
+    });
+
+    return () => {
+      if (playerRef.current && typeof playerRef.current.destroy === 'function') {
+        try {
+          playerRef.current.destroy();
+        } catch (e) {
+          console.error(e);
+        }
+      }
+    };
+  }, [currentTrack, apiReady]);
+
+  const handleVideoEnded = () => {
+    setCurrentTrack((prevIndex) => (prevIndex + 1) % YOUTUBE_IDS.length);
+  };
+
+  const toggleSound = () => {
+    if (playerRef.current && typeof playerRef.current.unMute === 'function') {
+      if (isMuted) {
+        playerRef.current.unMute();
+        playerRef.current.setVolume(100);
+        setIsMuted(false);
+      } else {
+        playerRef.current.mute();
+        setIsMuted(true);
+      }
+    } else {
+      setIsMuted(!isMuted);
+    }
+  };
+
   return (
     <>
       <Head>
@@ -12,17 +125,14 @@ export default function FreeTrialPage() {
       <div className="trial-page-wrapper">
         <div className="trial-container">
           
-          {/* Top Title Section */}
           <div className="trial-header">
             <span className="live-pill">● LIVE SERVER BENCHMARK</span>
             <h1>Test Our Streaming Speed <span className="gradient-text">Live Below</span></h1>
             <p>Don't trust words, verify the performance yourself. Below is a real-time sample player running on our premium localized nodes with zero compression lag.</p>
           </div>
 
-          {/* Interactive Player Grid */}
           <div className="player-grid">
             
-            {/* The Live Screen Element */}
             <div className="video-player-container">
               <div className="player-top-bar">
                 <div className="stream-info">
@@ -33,29 +143,20 @@ export default function FreeTrialPage() {
               </div>
               
               <div className="video-viewport">
-                {/* Simulated Real Stream/Video element */}
-                <video 
-                  autoPlay 
-                  muted 
-                  loop 
-                  playsInline
-                  className="live-video-source"
-                  poster="https://images.unsplash.com/photo-1508098682722-e99c43a406b2?q=80&w=1200&auto=format&fit=crop"
-                >
-                  {/* High quality free stock loop clip for IPTV streaming emulation */}
-                  <source src="https://assets.mixkit.co/videos/preview/mixkit-stadium-lights-shining-bright-at-night-40788-large.mp4" type="video/mp4" />
-                  Your browser does not support the video tag.
-                </video>
                 
-                {/* Cinematic Overlays to mimic modern web players */}
+                <div className="iframe-wrapper">
+                  <div id="youtube-embedded-stream"></div>
+                </div>
+                
                 <div className="player-controls-overlay">
-                  <div className="control-btn-mock">🔊 100% Volume</div>
-                  <div className="control-btn-mock Resolution">Ultra HD 4K</div>
+                  <button className="sound-toggle-btn" onClick={toggleSound}>
+                    {isMuted ? '🔇 Tap to Unmute' : '🔊 Mute Sound'}
+                  </button>
+                  <div className="control-btn-mock resolution-tag">Ultra HD 4K (Live)</div>
                 </div>
               </div>
             </div>
 
-            {/* Content Action Deck Beside Player */}
             <div className="action-deck">
               <h3>Get Personal Access</h3>
               <p>Like the performance? Grab a personal 2-Hour active custom lineup playlist containing 21,000+ local & international stations sent straight to your WhatsApp container.</p>
@@ -87,10 +188,8 @@ export default function FreeTrialPage() {
         .gradient-text { background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
         .trial-header p { color: var(--text-secondary); max-width: 650px; font-size: 15px; line-height: 1.7; font-weight: 300; }
 
-        /* Structural Layout for Video Side by Side Configuration */
         .player-grid { display: grid; grid-template-columns: 1.6fr 1fr; gap: 2rem; align-items: start; }
         
-        /* Premium Video Player Panel Styles */
         .video-player-container { background: #0b0b14; border: 1px solid var(--border); border-radius: 16px; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.6); }
         .player-top-bar { background: rgba(255,255,255,0.02); padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); font-size: 12px; color: var(--text-muted); }
         .stream-info { display: flex; align-items: center; gap: 8px; }
@@ -98,13 +197,18 @@ export default function FreeTrialPage() {
         .channel-title { color: #fff; font-weight: 500; }
         
         .video-viewport { position: relative; width: 100%; aspect-ratio: 16 / 9; background: #000; overflow: hidden; display: flex; align-items: center; }
-        .live-video-source { width: 100%; height: 100%; object-fit: cover; }
         
-        .player-controls-overlay { position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(to top, rgba(0,0,0,0.8), transparent); padding: 20px; display: flex; justify-content: space-between; opacity: 0; transition: opacity 0.3s; }
-        .video-viewport:hover .player-controls-overlay { opacity: 1; }
-        .control-btn-mock { background: rgba(255,255,255,0.1); backdrop-filter: blur(4px); font-size: 11px; padding: 4px 10px; border-radius: 4px; font-weight: 500; }
+        .iframe-wrapper { width: 100%; height: 100%; position: relative; pointer-events: none; }
+        .iframe-wrapper :global(iframe) { width: 100% !important; height: 100% !important; position: absolute; top:0; left:0; object-fit: cover; transform: scale(1.35); }
+        
+        .player-controls-overlay { position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(to top, rgba(0,0,0,0.9), rgba(0,0,0,0.2), transparent); padding: 20px; display: flex; justify-content: space-between; align-items: center; z-index: 10; }
+        
+        .sound-toggle-btn { background: #7c3aed; border: none; color: #fff; font-size: 12px; padding: 8px 16px; border-radius: 6px; font-weight: 600; cursor: pointer; transition: background 0.2s, transform 0.2s; box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3); }
+        .sound-toggle-btn:hover { background: #6d28d9; transform: scale(1.02); }
+        
+        .control-btn-mock { background: rgba(255,255,255,0.1); backdrop-filter: blur(4px); font-size: 11px; padding: 6px 12px; border-radius: 6px; font-weight: 500; }
+        .resolution-tag { border: 1px solid rgba(255,255,255,0.15); color: #4ade80; }
 
-        /* Sidebar Action Deck Layout */
         .action-deck { background: var(--bg-card); border: 1px solid var(--border); padding: 2.5rem 2rem; border-radius: 16px; display: flex; flex-direction: column; gap: 1.25rem; }
         .action-deck h3 { font-family: var(--font-display); font-size: 24px; font-weight: 700; }
         .action-deck p { color: var(--text-secondary); font-size: 14px; line-height: 1.6; font-weight: 300; }
@@ -118,7 +222,6 @@ export default function FreeTrialPage() {
 
         @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
 
-        /* Responsive Layout Overrides */
         @media (max-width: 968px) {
           .player-grid { grid-template-columns: 1fr; gap: 2.5rem; }
           .trial-page-wrapper { padding: 3rem 1.25rem; }
