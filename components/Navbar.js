@@ -8,7 +8,7 @@ export default function Navbar() {
   const router = useRouter(); // 2. Initialize router
 
   const handleFreeTrialClick = () => {
-    router.push('/free-trial'); // 3. Programmatic Navigation
+    router.push('./free_trial.js'); // 3. Programmatic Navigation
   };
 
   return (
