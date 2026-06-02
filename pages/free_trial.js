@@ -2,13 +2,12 @@ import { useState, useEffect, useRef } from 'react';
 import Head from 'next/head';
 import { openWhatsApp, WA_MESSAGES } from '../lib/whatsapp';
 
-// Clean embedding-allowed YouTube IDs stack
-const YOUTUBE_IDS = [
-  "9rHXfnT4sBI",
-  "hCzwv9RPLkE",
-  "YGJPYh713d0",
-  "PD-zh2omR_A",
-  "ifIrIfGkhzM"
+const LIVE_CHANNELS = [
+  { name: "Geo News", id: "1oJqX8-Gklo" },
+  { name: "India Today", id: "sYZtOFzM78M" },
+  { name: "GBNews", id: "QliL4CGc7iY" },
+  { name: "Oneindia News", id: "vkOALDnyShI" },
+  { name: "Sky News", id: "u03OWmaMopg" }
 ];
 
 export default function FreeTrialPage() {
@@ -45,11 +44,10 @@ export default function FreeTrialPage() {
       }
     }
 
-    // Fixed: Added absolute hosting origin headers to prevent domain restriction blocks
     const currentOrigin = typeof window !== 'undefined' ? window.location.origin : '';
 
     playerRef.current = new window.YT.Player('youtube-embedded-stream', {
-      videoId: YOUTUBE_IDS[currentTrack],
+      videoId: LIVE_CHANNELS[currentTrack].id,
       playerVars: {
         autoplay: 1,
         mute: isMuted ? 1 : 0,
@@ -60,7 +58,7 @@ export default function FreeTrialPage() {
         iv_load_policy: 3,
         playsinline: 1,
         fs: 0,
-        origin: currentOrigin // Bypasses cross-origin block restrictions
+        origin: currentOrigin
       },
       events: {
         onReady: (event) => {
@@ -73,14 +71,13 @@ export default function FreeTrialPage() {
           }
         },
         onStateChange: (event) => {
+          // Jab video ENDED (0) ho jaye, toh free trial par shift nahi karna, direct WhatsApp order trigger hoga
           if (event.data === window.YT.PlayerState.ENDED) {
-            handleVideoEnded();
+            redirectToWhatsAppPurchase();
           }
         },
         onError: (event) => {
-          // CRITICAL: If any video is restricted/disabled by owner, auto-skip instantly
-          console.log("Video restricted or broken, skipping to next track automatically.");
-          handleVideoEnded();
+          console.log("Stream node interrupted.");
         }
       }
     });
@@ -96,8 +93,14 @@ export default function FreeTrialPage() {
     };
   }, [currentTrack, apiReady]);
 
-  const handleVideoEnded = () => {
-    setCurrentTrack((prevIndex) => (prevIndex + 1) % YOUTUBE_IDS.length);
+  // Direct Purchase Redirect Helper
+  const redirectToWhatsAppPurchase = () => {
+    // Agar WA_MESSAGES.buyPackage ya similar predefined text hai toh use karein, otherwise customizable template text pass kiya hai
+    if (WA_MESSAGES && WA_MESSAGES.buyPackage) {
+      openWhatsApp(WA_MESSAGES.buyPackage);
+    } else {
+      openWhatsApp("Hi, I checked your live stream benchmark. I want to buy a Premium IPTV Package. Please share the pricing details.");
+    }
   };
 
   const toggleSound = () => {
@@ -118,8 +121,8 @@ export default function FreeTrialPage() {
   return (
     <>
       <Head>
-        <title>Get Your Free 2-Hour Trial | HorizonStream IPTV</title>
-        <meta name="description" content="Test our extreme 4K server buffer speeds live before ordering." />
+        <title>Get Premium Access Now | HorizonStream IPTV</title>
+        <meta name="description" content="Verify server buffer speeds live and activate your premium account instantly." />
       </Head>
 
       <div className="trial-page-wrapper">
@@ -131,13 +134,26 @@ export default function FreeTrialPage() {
             <p>Don't trust words, verify the performance yourself. Below is a real-time sample player running on our premium localized nodes with zero compression lag.</p>
           </div>
 
+          <div className="channel-switch-bar">
+            {LIVE_CHANNELS.map((channel, index) => (
+              <button 
+                key={channel.id} 
+                className={`channel-nav-btn ${currentTrack === index ? 'active-node' : ''}`}
+                onClick={() => setCurrentTrack(index)}
+              >
+                <span className="pulse-indicator"></span>
+                {channel.name}
+              </button>
+            ))}
+          </div>
+
           <div className="player-grid">
             
             <div className="video-player-container">
               <div className="player-top-bar">
                 <div className="stream-info">
                   <span className="green-dot"></span>
-                  <span className="channel-title">Stream Node: US/UK Sports 4K (60FPS)</span>
+                  <span className="channel-title">Stream Node: {LIVE_CHANNELS[currentTrack].name} (Premium 4K)</span>
                 </div>
                 <div className="stream-stats">Bitrate: 14.2 Mbps • Delay: 0.1s</div>
               </div>
@@ -157,20 +173,22 @@ export default function FreeTrialPage() {
               </div>
             </div>
 
+            {/* Updated Action Deck focusing on Premium Packages instead of Free Trial */}
             <div className="action-deck">
-              <h3>Get Personal Access</h3>
-              <p>Like the performance? Grab a personal 2-Hour active custom lineup playlist containing 21,000+ local & international stations sent straight to your WhatsApp container.</p>
+              <h3>Get Instant Premium Access</h3>
+              <p>Satisfied with the performance? Order your premium dedicated subscription lineup today and unlock over 21,000+ global channels with absolute stable connections.</p>
               
               <div className="trial-perks">
-                <div className="perk-item">✓ Access to all 21 Premium Servers</div>
-                <div className="perk-item">✓ Complete 4K Cinema VOD Archive</div>
-                <div className="perk-item">✓ Setup setup support guides provided</div>
+                <div className="perk-item">✓ 21,000+ Premium Live Channels (4K/HD)</div>
+                <div className="perk-item">✓ Huge VOD Library (Latest Movies & Series)</div>
+                <div className="perk-item">✓ Anti-Freeze & No-Buffer Server Technology</div>
+                <div className="perk-item">✓ 24/7 Dedicated WhatsApp Support Setup</div>
               </div>
 
-              <button className="cta-trial-btn" onClick={() => openWhatsApp(WA_MESSAGES.freeTrial)}>
-                ⚡ Request Personal M3U Trial
+              <button className="cta-trial-btn" onClick={redirectToWhatsAppPurchase}>
+                ⚡ Order Premium Package via WhatsApp
               </button>
-              <span className="subtext-alert">🕒 Average delivery time: 2 Minutes via WhatsApp</span>
+              <span className="subtext-alert">🕒 Setup Delivery Time: Under 5 Minutes via WhatsApp</span>
             </div>
 
           </div>
@@ -182,11 +200,19 @@ export default function FreeTrialPage() {
         .trial-page-wrapper { background: #03030b; color: #fff; min-height: 100vh; padding: 4rem 2rem 6rem; font-family: var(--font-body); }
         .trial-container { max-width: 1200px; margin: 0 auto; }
         
-        .trial-header { text-align: center; margin-bottom: 4rem; display: flex; flex-direction: column; align-items: center; gap: 0.75rem; }
+        .trial-header { text-align: center; margin-bottom: 2.5rem; display: flex; flex-direction: column; align-items: center; gap: 0.75rem; }
         .live-pill { background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); color: #ef4444; font-size: 11px; font-weight: 700; padding: 4px 12px; border-radius: 50px; letter-spacing: 1px; }
         .trial-header h1 { font-family: var(--font-display); font-size: clamp(28px, 4vw, 46px); font-weight: 800; letter-spacing: -1px; }
         .gradient-text { background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
         .trial-header p { color: var(--text-secondary); max-width: 650px; font-size: 15px; line-height: 1.7; font-weight: 300; }
+
+        .channel-switch-bar { display: flex; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 1.5rem; width: 100%; justify-content: flex-start; }
+        .channel-nav-btn { background: #0b0b14; border: 1px solid var(--border); color: var(--text-secondary); font-family: var(--font-body); font-size: 13px; font-weight: 500; padding: 10px 18px; border-radius: 8px; cursor: pointer; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); display: flex; align-items: center; gap: 8px; }
+        .channel-nav-btn:hover { background: rgba(255, 255, 255, 0.03); color: #fff; border-color: rgba(255,255,255,0.2); }
+        .active-node { background: rgba(124, 58, 237, 0.1) !important; border-color: #7c3aed !important; color: #fff !important; font-weight: 600; box-shadow: 0 4px 20px rgba(124, 58, 237, 0.15); }
+        
+        .pulse-indicator { width: 6px; height: 6px; background: transparent; border-radius: 50%; display: inline-block; }
+        .active-node .pulse-indicator { background: #a78bfa; box-shadow: 0 0 8px #a78bfa; animation: blink 1.2s infinite; }
 
         .player-grid { display: grid; grid-template-columns: 1.6fr 1fr; gap: 2rem; align-items: start; }
         
@@ -225,6 +251,8 @@ export default function FreeTrialPage() {
         @media (max-width: 968px) {
           .player-grid { grid-template-columns: 1fr; gap: 2.5rem; }
           .trial-page-wrapper { padding: 3rem 1.25rem; }
+          .channel-switch-bar { justify-content: flex-start; gap: 0.5rem; }
+          .channel-nav-btn { padding: 8px 14px; font-size: 12px; }
         }
       `}</style>
     </>
