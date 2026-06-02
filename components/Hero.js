@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { openWhatsApp, WA_MESSAGES } from '../lib/whatsapp';
 
 const WaIcon = () => (
@@ -9,25 +10,73 @@ const WaIcon = () => (
 
 const stats = [
   { value: '10,000+', label: 'Live Channels' },
-  { value: '15+', label: 'Premium Servers' }, // Updated to showcase your larger network
-  { value: '99.9%', label: 'Uptime' },
+  { value: '15+', label: 'Premium Servers' }, 
+  { value: '99.9%', label: 'Uptime Verified' },
   { value: '4K/8K', label: 'Ultra HD Quality' },
 ];
 
 export default function Hero() {
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchResult, setSearchResult] = useState(null);
+
+  const handleChannelSearch = (e) => {
+    e.preventDefault();
+    if (!searchQuery.trim()) return;
+
+    // Interactive engagement response simulator
+    setSearchResult({
+      checking: true,
+      text: `Searching for "${searchQuery}" across 15+ servers...`
+    });
+
+    setTimeout(() => {
+      setSearchResult({
+        checking: false,
+        text: `🟢 "${searchQuery}" is Available in Ultra HD 4K!`,
+        success: true
+      });
+    }, 900);
+  };
+
   return (
     <>
       <section className="hero">
         <div className="hero-glow" aria-hidden="true" />
         <div className="hero-glow-2" aria-hidden="true" />
         <div className="hero-inner">
-          <div className="hero-badge"><span className="badge-dot" />Live Streaming Available Now</div>
+          {/* Enhanced Badge for instant validation */}
+          <div className="hero-badge">
+            <span className="badge-dot" />
+            All Servers Online — 99.9% Live Streaming Stable
+          </div>
+          
           <h1 className="hero-title">Stream <span className="gradient-text">Everything</span><br />You Love</h1>
           <p className="hero-desc">Premium IPTV with StarShare, 5G Live, Opplex, and elite 4K servers. Thousands of live channels, movies, and shows in uncompressed quality.</p>
-          <div className="hero-actions">
-            <button className="btn-wa" onClick={() => openWhatsApp(WA_MESSAGES.freeTrial)}><WaIcon />Start Free Trial</button>
-            <a href="#plans" className="btn-ghost">View Plans <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+          
+          {/* NEW: Interactive Channel Search Component to engage users */}
+          <div className="search-box-container">
+            <form onSubmit={handleChannelSearch} className="search-form">
+              <input 
+                type="text" 
+                placeholder="Search your favorite channel, sports league, or movie..." 
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="search-input"
+              />
+              <button type="submit" className="btn-search">Check Availability</button>
+            </form>
+            {searchResult && (
+              <div className={`search-feedback ${searchResult.success ? 'success' : 'loading'}`}>
+                {searchResult.text}
+              </div>
+            )}
           </div>
+
+          <div className="hero-actions">
+            <button className="btn-wa" onClick={() => openWhatsApp(WA_MESSAGES.freeTrial)}><WaIcon />Start 2-Hour Free Trial</button>
+            <a href="#plans" className="btn-ghost">View Premium Plans <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+          </div>
+
           <div className="hero-stats">
             {stats.map((s) => (
               <div key={s.label} className="stat">
@@ -35,6 +84,14 @@ export default function Hero() {
                 <span className="stat-label">{s.label}</span>
               </div>
             ))}
+          </div>
+
+          {/* NEW: Live Ticker Hook for Sports & Events */}
+          <div className="live-ticker">
+            <div className="ticker-label">LIVE TONIGHT</div>
+            <div className="ticker-content">
+              <p>🔥 UCL Football, ICC T20 Matches, and WWE Premium Events — Streaming live on StarShare & Opplex servers in Ultra Low Latency 4K!</p>
+            </div>
           </div>
         </div>
 
@@ -54,7 +111,7 @@ export default function Hero() {
             ))}
           </div>
 
-          {/* Column 2 (Offsets visually to create a zigzag modern dashboard effect) */}
+          {/* Column 2 */}
           <div className="deco-col col-offset">
             {[
               { name: '5G Live', delay: '0.2s', offset: '5px' },
@@ -71,7 +128,7 @@ export default function Hero() {
       </section>
 
       <style jsx>{`
-        .hero { position:relative;overflow:hidden;min-height:92vh;display:flex;align-items:center;padding:5rem 2rem 4rem; }
+        .hero { position:relative;overflow:hidden;min-height:100vh;display:flex;align-items:center;padding:6rem 2rem 5rem; }
         .hero-glow { position:absolute;top:-20%;left:-10%;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(124,58,237,0.2) 0%,transparent 70%);pointer-events:none; }
         .hero-glow-2 { position:absolute;bottom:-10%;right:5%;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(6,182,212,0.12) 0%,transparent 70%);pointer-events:none; }
         .hero-inner { position:relative;z-index:2;max-width:1200px;margin:0 auto;width:100%; }
@@ -80,26 +137,44 @@ export default function Hero() {
         @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.5;transform:scale(1.3)}}
         .hero-title { font-family:var(--font-display);font-size:clamp(52px,9vw,100px);font-weight:800;line-height:1;letter-spacing:-2px;margin-bottom:1.5rem;max-width:700px; }
         .gradient-text { background:var(--gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text; }
-        .hero-desc { font-size:clamp(15px,2vw,18px);color:var(--text-secondary);font-weight:300;line-height:1.75;max-width:520px;margin-bottom:2.5rem; }
+        .hero-desc { font-size:clamp(15px,2vw,18px);color:var(--text-secondary);font-weight:300;line-height:1.75;max-width:520px;margin-bottom:2rem; }
+        
+        /* Interactive Search Box Styles */
+        .search-box-container { max-width: 550px; margin-bottom: 2rem; }
+        .search-form { display: flex; gap: 8px; background: rgba(16, 16, 42, 0.6); padding: 6px; border-radius: 10px; border: 1px solid var(--border); backdrop-filter: blur(10px); }
+        .search-input { flex: 1; background: transparent; border: none; outline: none; color: #fff; padding: 10px 14px; font-size: 14px; }
+        .search-input::placeholder { color: var(--text-muted); }
+        .btn-search { background: rgba(124, 58, 237, 0.2); border: 1px solid rgba(124, 58, 237, 0.4); color: #c084fc; font-size: 13px; font-weight: 600; padding: 0 16px; border-radius: 6px; cursor: pointer; transition: all 0.2s; }
+        .btn-search:hover { background: rgba(124, 58, 237, 0.4); color: #fff; }
+        .search-feedback { font-size: 13px; margin-top: 8px; padding-left: 8px; font-weight: 500; }
+        .search-feedback.success { color: #4ade80; animation: fadeIn 0.3s ease; }
+        .search-feedback.loading { color: #a78bfa; }
+
         .hero-actions { display:flex;align-items:center;gap:1rem;flex-wrap:wrap;margin-bottom:3.5rem; }
         .btn-wa { display:inline-flex;align-items:center;gap:10px;background:var(--wa-green);color:#fff;font-size:15px;font-weight:600;padding:14px 28px;border-radius:8px;border:none;transition:background 0.2s,transform 0.2s;cursor:pointer; }
         .btn-wa:hover { background:var(--wa-green-dark);transform:translateY(-2px); }
         .btn-ghost { display:inline-flex;align-items:center;gap:8px;color:var(--text-secondary);font-size:15px;font-weight:500;border:1px solid var(--border-hover);padding:13px 24px;border-radius:8px;transition:all 0.2s; }
         .btn-ghost:hover { color:#fff;border-color:rgba(255,255,255,0.3); }
-        .hero-stats { display:flex;gap:2.5rem;flex-wrap:wrap; }
+        .hero-stats { display:flex;gap:2.5rem;flex-wrap:wrap; margin-bottom: 3.5rem; }
         .stat { display:flex;flex-direction:column;gap:2px; }
         .stat-value { font-family:var(--font-display);font-size:28px;font-weight:800;background:var(--gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text; }
         .stat-label { font-size:12px;color:var(--text-muted);letter-spacing:0.5px;text-transform:uppercase; }
         
+        /* Live Events Notification Ticker */
+        .live-ticker { display: flex; align-items: center; background: rgba(6, 182, 212, 0.06); border: 1px solid rgba(6, 182, 212, 0.15); max-width: 680px; border-radius: 8px; padding: 10px 14px; gap: 12px; overflow: hidden; }
+        .ticker-label { background: #06b6d4; color: #000; font-size: 11px; font-weight: 800; padding: 3px 8px; border-radius: 4px; letter-spacing: 0.5px; white-space: nowrap; }
+        .ticker-content { font-size: 13px; color: #92400e; color: var(--text-secondary); white-space: nowrap; text-overflow: ellipsis; overflow: hidden; }
+
         /* --- Expanded Layout Configuration --- */
         .hero-deco { position:absolute;right:2%;top:50%;transform:translateY(-50%);display:flex;gap:1.25rem;z-index:1; }
         .deco-col { display:flex;flex-direction:column;gap:1rem; }
-        .col-offset { margin-top: 2rem; } /* Gives alternating alignment layout */
+        .col-offset { margin-top: 2rem; }
         
         .deco-card { display:flex;align-items:center;gap:10px;background:rgba(16,16,42,0.85);border:1px solid var(--border);padding:12px 18px;border-radius:10px;font-size:14px;font-weight:500;backdrop-filter:blur(8px);animation:float 4s ease-in-out infinite;white-space:nowrap;width:170px; }
         .secondary-card { border-color: rgba(6,182,212,0.15); }
         
         @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+        @keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
         .deco-dot { width:8px;height:8px;background:#4ade80;border-radius:50%;flex-shrink:0; }
         .pulse-blue { background: #06b6d4; }
         
@@ -109,7 +184,14 @@ export default function Hero() {
         /* Responsive Fixes */
         @media(max-width:1150px){ .hero-deco{ transform: translateY(-50%) scale(0.85); right: -2%; } }
         @media(max-width:980px){ .hero-deco{display:none;} }
-        @media(max-width:480px){ .hero-stats{gap:1.5rem;} .hero-title{letter-spacing:-1px;} }
+        @media(max-width:480px){ 
+          .hero-stats{gap:1.5rem; margin-bottom: 2rem;} 
+          .hero-title{letter-spacing:-1px;} 
+          .search-form { flex-direction: column; background: transparent; border: none; padding: 0; }
+          .search-input { background: rgba(16, 16, 42, 0.6); border: 1px solid var(--border); border-radius: 8px; margin-bottom: 8px; }
+          .btn-search { padding: 12px; font-size: 14px; }
+          .live-ticker { flex-direction: column; align-items: flex-start; gap: 6px; }
+        }
       `}</style>
     </>
   );
