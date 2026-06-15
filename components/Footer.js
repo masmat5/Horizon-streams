@@ -18,14 +18,12 @@ export default function Footer() {
             <div className="footer-links">
               <div className="links-col">
                 <h4>Servers</h4>
-                <button onClick={() => openWhatsApp(WA_MESSAGES.starShare)}>StarShare</button>
-                <button onClick={() => openWhatsApp(WA_MESSAGES.opplex)}>Opplex</button>
-                <button onClick={() => openWhatsApp(WA_MESSAGES.b1g)}>B1G 4K</button>
+                <button onClick={() => openWhatsApp(WA_MESSAGES.starShare)}>All servers subscription and reseller panels are Available</button>
               </div>
               <div className="links-col">
                 <h4>Plans</h4>
-                <button onClick={() => openWhatsApp('Hello HorizonStream IPTV! I want the 1 Month plan.')}>1 Month</button>
-                <button onClick={() => openWhatsApp('Hello HorizonStream IPTV! I want the 3 Month plan.')}>3 Months</button>
+                <button onClick={() => openWhatsApp('Hello HorizonStream IPTV! I want the 1 Month plan.')}>3 Month</button>
+                <button onClick={() => openWhatsApp('Hello HorizonStream IPTV! I want the 3 Month plan.')}>6 Months</button>
                 <button onClick={() => openWhatsApp('Hello HorizonStream IPTV! I want the 1 Year plan.')}>1 Year</button>
               </div>
               <div className="links-col">
