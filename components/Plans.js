@@ -1,43 +1,67 @@
+import Head from 'next/head';
 import { openWhatsApp } from '../lib/whatsapp';
+import { SITE_URL } from './SEOHead';
 
 const plans = [
-  { duration: '1 Month', price: '£ 10', per: '/mo', features: ['All 3 Servers', 'HD & 4K Quality', 'All Devices', '24/7 Support'], featured: false, waMsg: 'Hello HorizonStream IPTV! I want to order the 1 Month plan for PKR 800. 📺' },
-  { duration: '3 Months', price: '£ 25', per: '/3mo', features: ['All 3 Servers', 'HD & 4K Quality', 'All Devices', 'Priority Support', 'Save PKR 300'], featured: true, waMsg: 'Hello HorizonStream IPTV! I want to order the 3 Month plan for PKR 2,100. 📺' },
-  { duration: '6 Months', price: '£ 45', per: '/6mo', features: ['All 3 Servers', 'HD & 4K Quality', 'All Devices', 'Priority Support', 'Best Value'], featured: false, waMsg: 'Hello HorizonStream IPTV! I want to order the 6 Month plan for PKR 3,800. 📺' },
-  { duration: '1 Year', price: '£ 80', per: '/yr', features: ['All 3 Servers', 'HD & 4K Quality', 'All Devices', 'Priority Support', 'Reseller Access'], featured: false, waMsg: 'Hello HorizonStream IPTV! I want to order the 1 Year plan for PKR 7,000. 📺' },
+  { duration: '1 Month', price: '£10', per: '/month', features: ['Access to All Premium Servers', '4K & Ultra HD Streaming', 'Compatible with All Devices', '24/7 Technical Support'], featured: false, waMsg: 'Hello HorizonStream IPTV! I would like to order the 1 Month Subscription Plan (£10).' },
+  { duration: '3 Months', price: '£25', per: '/3 months', features: ['Access to All Premium Servers', '4K & Ultra HD Streaming', 'Compatible with All Devices', 'Priority Support', 'Save £5 Instantly'], featured: true, waMsg: 'Hello HorizonStream IPTV! I would like to order the 3 Months Subscription Plan (£25).' },
+  { duration: '6 Months', price: '£45', per: '/6 months', features: ['Access to All Premium Servers', '4K & Ultra HD Streaming', 'Compatible with All Devices', 'Priority Support', 'Best Value Package'], featured: false, waMsg: 'Hello HorizonStream IPTV! I would like to order the 6 Months Subscription Plan (£45).' },
+  { duration: '1 Year', price: '£80', per: '/year', features: ['Access to All Premium Servers', '4K & Ultra HD Streaming', 'Multi-Device Options', 'VIP Support Channel', 'Free Server Updates'], featured: false, waMsg: 'Hello HorizonStream IPTV! I would like to order the 1 Year Subscription Plan (£80).' },
 ];
 
 const WaIcon = () => (<svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/></svg>);
 const Check = () => (<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>);
 
+const plansSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Product',
+  name: 'HorizonStream IPTV Subscription',
+  description: 'Premium IPTV subscription with access to StarShare, Opplex, B1G and 15+ servers, 10,000+ live channels, and 4K/8K Ultra HD streaming.',
+  brand: { '@type': 'Brand', name: 'HorizonStream IPTV' },
+  offers: plans.map((plan) => ({
+    '@type': 'Offer',
+    name: `${plan.duration} IPTV Subscription`,
+    price: plan.price.replace(/[^\d.]/g, ''),
+    priceCurrency: 'GBP',
+    url: `${SITE_URL}/#plans`,
+    availability: 'https://schema.org/InStock',
+  })),
+};
+
 export default function Plans() {
   return (
     <>
+      <Head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(plansSchema) }}
+        />
+      </Head>
       <section className="plans-section" id="plans">
         <div className="container">
           <div className="section-header">
-            <p className="section-tag">Pricing</p>
-            <h2 className="section-title">Simple, Transparent <span className="gradient-text">Plans</span></h2>
-            <p className="section-sub">All plans include access to all three servers. Order instantly on WhatsApp — no forms, no waiting.</p>
+            <p className="section-tag">Affordable IPTV Packages</p>
+            <h2 className="section-title">Simple & Transparent <span className="gradient-text">Pricing Plans</span></h2>
+            <p className="section-sub">Choose your subscription length. All IPTV plans grant instant access to 10,000+ live channels and VODs.</p>
           </div>
           <div className="plans-grid">
             {plans.map((plan) => (
               <div key={plan.duration} className={`plan-card${plan.featured ? ' featured' : ''}`}>
                 {plan.featured && <div className="featured-badge">⚡ Most Popular</div>}
                 <div className="plan-header">
-                  <p className="plan-duration">{plan.duration}</p>
+                  <h3 className="plan-duration">{plan.duration}</h3>
                   <div className="plan-price">{plan.price}<span className="plan-per">{plan.per}</span></div>
                 </div>
                 <ul className="plan-features">
                   {plan.features.map((f) => (<li key={f}><Check />{f}</li>))}
                 </ul>
                 <button className={`plan-btn${plan.featured ? ' featured-btn' : ''}`} onClick={() => openWhatsApp(plan.waMsg)}>
-                  <WaIcon />Order on WhatsApp
+                  <WaIcon />Order via WhatsApp
                 </button>
               </div>
             ))}
           </div>
-          <p className="plans-note">Need a custom plan? <button className="inline-link" onClick={() => openWhatsApp('Hello HorizonStream IPTV! I need a custom subscription plan.')}>Message us on WhatsApp</button></p>
+          <p className="plans-note">Need a custom playlist or reseller account? <button className="inline-link" onClick={() => openWhatsApp('Hello HorizonStream IPTV! I need a custom IPTV package.')}>Chat with us on WhatsApp</button></p>
         </div>
       </section>
       <style jsx>{`

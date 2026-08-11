@@ -1,6 +1,15 @@
 import { useState, useEffect, useRef } from 'react';
-import Head from 'next/head';
 import { openWhatsApp, WA_MESSAGES } from '../lib/whatsapp';
+import SEOHead, { SITE_URL } from '../components/SEOHead';
+
+const freeTrialSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: SITE_URL },
+    { '@type': 'ListItem', position: 2, name: 'Free Trial', item: `${SITE_URL}/free_trial` },
+  ],
+};
 
 const LIVE_CHANNELS = [
   { name: "Geo News", id: "1oJqX8-Gklo" },
@@ -120,10 +129,13 @@ export default function FreeTrialPage() {
 
   return (
     <>
-      <Head>
-        <title>Get Premium Access Now | HorizonStream IPTV</title>
-        <meta name="description" content="Verify server buffer speeds live and activate your premium account instantly." />
-      </Head>
+      <SEOHead
+        title="Free IPTV Trial — Watch Live Streaming Speed Test | HorizonStream IPTV"
+        description="Try HorizonStream IPTV free before you subscribe. Watch a live streaming speed benchmark, verify zero-buffer 4K performance, then get instant premium access via WhatsApp."
+        keywords="free IPTV trial, IPTV trial 2026, test IPTV streaming, IPTV speed test, no buffering IPTV, HorizonStream free trial"
+        canonical={`${SITE_URL}/free_trial`}
+        structuredData={freeTrialSchema}
+      />
 
       <div className="trial-page-wrapper">
         <div className="trial-container">

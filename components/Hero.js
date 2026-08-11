@@ -50,7 +50,9 @@ export default function Hero() {
             All Servers Online — 99.9% Live Streaming Stable
           </div>
           
-          <h1 className="hero-title">Stream <span className="gradient-text">Everything</span><br />You Love</h1>
+          <h1 className="hero-title" aria-label="Stream Everything You Love">
+            Stream <span className="gradient-text">Everything</span><br />You Love
+          </h1>
           <p className="hero-desc">Premium IPTV with StarShare, 5G Live, Opplex, and elite 4K servers. Thousands of live channels, movies, and shows in uncompressed quality.</p>
           
           {/* NEW: Interactive Channel Search Component to engage users */}

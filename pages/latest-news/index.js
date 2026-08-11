@@ -1,8 +1,8 @@
-import Head from 'next/head';
 import Link from 'next/link';
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
 import FloatingWA from '../../components/FloatingWA';
+import SEOHead, { SITE_URL } from '../../components/SEOHead';
 
 export const posts = [
   { id: 1, slug: 'best-iptv-apps-2025', category: 'Streaming Tips', title: 'Best IPTV Apps to Use With HorizonStream IPTV in 2025', date: 'May 18, 2025', author: 'HorizonStream IPTV Team', excerpt: 'Looking for the best app to stream your HorizonStream IPTV subscription? We tested dozens of players and picked the top 5 that work flawlessly on Android, iOS, and Smart TV.', image: 'https://images.unsplash.com/photo-1593784991095-a205069470b6?w=800&q=70' },
@@ -14,14 +14,41 @@ export const posts = [
 
 const catColor = { 'Streaming Tips': '#7c3aed', 'Server Update': '#06b6d4', 'How To': '#f59e0b', 'News': '#4ade80' };
 
+const breadcrumbSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: SITE_URL },
+    { '@type': 'ListItem', position: 2, name: 'Latest News', item: `${SITE_URL}/latest-news` },
+  ],
+};
+
+const blogSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Blog',
+  name: 'HorizonStream IPTV — Latest News',
+  url: `${SITE_URL}/latest-news`,
+  description: 'IPTV streaming tips, server updates, and how-to guides from the HorizonStream IPTV team.',
+  blogPost: posts.map((p) => ({
+    '@type': 'BlogPosting',
+    headline: p.title,
+    url: `${SITE_URL}/latest-news/${p.slug}`,
+    datePublished: p.date,
+    author: { '@type': 'Organization', name: p.author },
+    image: p.image,
+  })),
+};
+
 export default function LatestNews() {
   return (
     <>
-      <Head>
-        <title>Latest News – HorizonStream IPTV</title>
-        <meta name="description" content="Get the latest news and updates from HorizonStream IPTV — server updates, streaming tips, and more." />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-      </Head>
+      <SEOHead
+        title="Latest News & IPTV Guides — HorizonStream IPTV Blog"
+        description="IPTV streaming tips, server updates, and step-by-step setup guides from the HorizonStream IPTV team. Stay up to date on StarShare, Opplex, and B1G server news."
+        keywords="IPTV news, IPTV blog, IPTV setup guide, IPTV streaming tips, StarShare updates, Opplex updates, B1G server news, how to setup IPTV"
+        canonical={`${SITE_URL}/latest-news`}
+        structuredData={[breadcrumbSchema, blogSchema]}
+      />
       <Navbar />
 
       {/* Hero */}

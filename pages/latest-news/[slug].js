@@ -1,8 +1,8 @@
-import Head from 'next/head';
 import Link from 'next/link';
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
 import FloatingWA from '../../components/FloatingWA';
+import SEOHead, { SITE_URL } from '../../components/SEOHead';
 import { posts } from './index';
 
 const fullContent = {
@@ -24,18 +24,59 @@ export async function getStaticProps({ params }) {
 export default function PostPage({ post }) {
   if (!post) return null;
   const catColor = { 'Streaming Tips': '#7c3aed', 'Server Update': '#06b6d4', 'How To': '#f59e0b', 'News': '#4ade80' };
+  const postUrl = `${SITE_URL}/latest-news/${post.slug}`;
+
+  const breadcrumbSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: SITE_URL },
+      { '@type': 'ListItem', position: 2, name: 'Latest News', item: `${SITE_URL}/latest-news` },
+      { '@type': 'ListItem', position: 3, name: post.title, item: postUrl },
+    ],
+  };
+
+  const articleSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    headline: post.title,
+    description: post.excerpt,
+    image: post.image,
+    datePublished: post.date,
+    dateModified: post.date,
+    author: { '@type': 'Organization', name: post.author, url: SITE_URL },
+    publisher: {
+      '@type': 'Organization',
+      name: 'HorizonStream IPTV',
+      logo: { '@type': 'ImageObject', url: `${SITE_URL}/logo.png` },
+    },
+    mainEntityOfPage: { '@type': 'WebPage', '@id': postUrl },
+    articleSection: post.category,
+  };
+
   return (
     <>
-      <Head>
-        <title>{post.title} – HorizonStream IPTV</title>
-        <meta name="description" content={post.excerpt} />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-      </Head>
+      <SEOHead
+        title={`${post.title} | HorizonStream IPTV`}
+        description={post.excerpt}
+        keywords={`${post.category}, IPTV blog, HorizonStream IPTV, ${post.title.toLowerCase()}`}
+        canonical={postUrl}
+        ogImage={post.image}
+        ogType="article"
+        structuredData={[breadcrumbSchema, articleSchema]}
+      />
       <Navbar />
 
       {/* Hero */}
       <div className="post-hero">
-        {post.image && <div className="post-hero-bg" style={{ backgroundImage: `url(${post.image})` }} />}
+        {post.image && (
+          <div
+            className="post-hero-bg"
+            style={{ backgroundImage: `url(${post.image})` }}
+            role="img"
+            aria-label={post.title}
+          />
+        )}
         <div className="post-hero-overlay" />
         <div className="post-hero-content">
           <nav className="breadcrumb"><Link href="/">Home</Link><span>/</span><Link href="/latest-news">Latest News</Link><span>/</span><span>{post.category}</span></nav>

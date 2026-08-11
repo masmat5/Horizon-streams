@@ -1,35 +1,58 @@
 import { useState } from 'react';
+import Head from 'next/head';
 import { openWhatsApp, WA_MESSAGES } from '../lib/whatsapp';
 
 const faqs = [
-  { q: 'How do I get a free trial?', a: 'Tap the "Free Trial" button anywhere on the page. It opens WhatsApp directly with our team. We will activate your 1-day free trial within minutes.' },
-  { q: 'Which devices are supported?', a: 'HorizonStream IPTV works on all devices — Android phones and tablets, iPhones, Smart TVs, Amazon Fire Stick, MAG boxes, Windows PCs, and Macs. Any device with an IPTV player app is supported.' },
-  { q: 'How do I make payment?', a: 'All payments are handled through WhatsApp. We accept EasyPaisa, JazzCash, and bank transfer. Contact us and we will guide you step by step.' },
-  { q: 'What is the difference between StarShare, Opplex, and B1G?', a: 'These are three different IPTV servers. StarShare focuses on sports and international channels, Opplex offers a huge VOD and live TV catalogue, and B1G provides 4K Ultra HD quality streams.' },
-  { q: 'Can I become a reseller?', a: 'Yes! We have a reseller panel available with competitive pricing. Visit our Reseller page or contact us on WhatsApp for full details.' },
-  { q: 'Is there a buffering or freezing issue?', a: 'Our servers are optimised for stable, buffer-free streaming. If you ever face any issues, our support team is available 24/7 on WhatsApp to resolve them immediately.' },
+  { q: 'How do I get a free IPTV trial?', a: 'Tap the "Free Trial" button anywhere on our website. It opens direct WhatsApp chat with our support team. We activate your free 2-hour trial within minutes.' },
+  { q: 'Which devices support HorizonStream IPTV?', a: 'HorizonStream IPTV works on all devices including Android TV, Smart TVs, Amazon Firestick, iPhones, iPads, Windows PC, Mac, MAG boxes, and Enigma devices.' },
+  { q: 'How do I make a payment for my subscription?', a: 'All payments are processed securely via WhatsApp. We accept EasyPaisa, JazzCash, Bank Transfer, and international payment options.' },
+  { q: 'What is the difference between StarShare, Opplex, and B1G servers?', a: 'StarShare specializes in live sports and global channels, Opplex offers a massive VOD movie/series library, and B1G provides uncompressed 4K Ultra HD streams.' },
+  { q: 'How do I become an IPTV reseller?', a: 'We offer an instant IPTV Reseller Panel with high margins and sub-panel management. Contact our sales team on WhatsApp for pricing and panel activation.' },
+  { q: 'Is there any buffering or freezing during live sports?', a: 'Our anti-freeze technology and load-balanced servers guarantee 99.9% uptime with buffer-free streaming across all internet connections.' },
 ];
 
 export default function FAQ() {
   const [open, setOpen] = useState(null);
+
+  // Schema.org FAQ Data for Rich Results
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": faqs.map(item => ({
+      "@type": "Question",
+      "name": item.q,
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": item.a
+      }
+    }))
+  };
+
   return (
     <>
+      <Head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+        />
+      </Head>
       <section className="faq-section" id="faq">
         <div className="container">
           <div className="faq-layout">
             <div className="faq-left">
-              <p className="section-tag">FAQ</p>
+              <p className="section-tag">Frequently Asked Questions</p>
               <h2 className="section-title">Got <span className="gradient-text">Questions?</span></h2>
-              <p className="section-sub">Cannot find your answer? Our team is always available on WhatsApp.</p>
+              <p className="section-sub">Need assistance before ordering? Our technical support team is available 24/7 on WhatsApp.</p>
               <button className="btn-wa" onClick={() => openWhatsApp(WA_MESSAGES.contactUs)}>
                 <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/></svg>
-                Ask on WhatsApp
+                Ask Support on WhatsApp
               </button>
             </div>
             <div className="faq-right">
               {faqs.map((item, i) => (
                 <div key={i} className={`faq-item${open === i ? ' open' : ''}`} onClick={() => setOpen(open === i ? null : i)}>
-                  <div className="faq-question"><span>{item.q}</span>
+                  <div className="faq-question">
+                    <h3 style={{margin: 0, font: 'inherit', color: 'inherit'}}>{item.q}</h3>
                     <svg className="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
                   </div>
                   {open === i && <p className="faq-answer">{item.a}</p>}
