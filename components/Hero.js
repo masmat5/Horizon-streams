@@ -47,13 +47,13 @@ export default function Hero() {
           {/* Enhanced Badge for instant validation */}
           <div className="hero-badge">
             <span className="badge-dot" />
-            All Servers Online — 99.9% Live Streaming Stable
+            Best IPTV Subscription 2026 — All Servers Online, 99.9% Uptime
           </div>
           
-          <h1 className="hero-title" aria-label="Stream Everything You Love">
+          <h1 className="hero-title" aria-label="Best IPTV Subscription 2026 - Stream Everything You Love">
             Stream <span className="gradient-text">Everything</span><br />You Love
           </h1>
-          <p className="hero-desc">Premium IPTV with StarShare, 5G Live, Opplex, and elite 4K servers. Thousands of live channels, movies, and shows in uncompressed quality.</p>
+          <p className="hero-desc">The best IPTV subscription for Firestick, Smart TV, Android, iPhone and MAG box. Premium IPTV with StarShare, 5G Live, Opplex and elite 4K servers — 10,000+ live channels, movies and live sports in HD, 4K and 8K. Start with a free IPTV trial.</p>
           
           {/* NEW: Interactive Channel Search Component to engage users */}
           <div className="search-box-container">

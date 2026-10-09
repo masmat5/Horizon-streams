@@ -16,9 +16,9 @@ export const DEFAULT_OG_IMAGE = `${SITE_URL}/og-image.jpg`;
  *   />
  */
 export default function SEOHead({
-  title = 'HorizonStream IPTV - Best IPTV Subscription 2026 | 10,000+ Live Channels',
+  title = 'Best IPTV Subscription 2026 | Premium 4K IPTV Service - HorizonStream IPTV',
   description = 'Premium IPTV subscription with 10,000+ live channels, 4K/8K Ultra HD movies & live sports. StarShare, Opplex, B1G and 15+ premium servers. Start your free 2-hour trial on WhatsApp — instant activation, zero buffering.',
-  keywords = 'IPTV subscription, buy IPTV, best IPTV service 2026, IPTV free trial, StarShare IPTV, Opplex IPTV, B1G 4K IPTV, IPTV reseller panel, 4K IPTV subscription, live sports IPTV, Firestick IPTV, Smart TV IPTV, cheap IPTV service',
+  keywords = 'best IPTV, best IPTV subscription, best IPTV service 2026, IPTV subscription, buy IPTV, premium IPTV, cheap IPTV, IPTV free trial, IPTV 4K, 4K IPTV subscription, IPTV UK, IPTV USA, IPTV Pakistan, IPTV Canada, IPTV Firestick, IPTV Smart TV, IPTV Smarters Pro, TiviMate IPTV, M3U IPTV, Xtream Codes IPTV, IPTV reseller panel, live sports IPTV, cricket IPTV, StarShare IPTV, Opplex IPTV, B1G IPTV, HorizonStream IPTV',
   canonical = SITE_URL,
   ogImage = DEFAULT_OG_IMAGE,
   ogType = 'website',

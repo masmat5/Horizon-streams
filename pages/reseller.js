@@ -9,15 +9,15 @@ const benefits = [
   { icon: '💰', title: 'High Profit Margins', desc: 'Buy credits at wholesale rates and sell at your own pricing. Earn up to 40% profit on every sale.' },
   { icon: '📊', title: 'Reseller Panel', desc: 'Full access to a dedicated reseller dashboard to manage all your customers in one place.' },
   { icon: '⚡', title: 'Instant Activation', desc: 'Activate new customer subscriptions instantly through your panel — no delays, no waiting.' },
-  { icon: '🌍', title: 'All 3 Servers', desc: 'Resell access to StarShare, Opplex, and B1G. Offer your customers the best possible choice.' },
+  { icon: '🌍', title: 'All 21 Servers', desc: 'Resell access to StarShare, Opplex, B1G, Dream8K, Trex and 15+ more IPTV servers. Offer your customers the best possible choice.' },
   { icon: '🎧', title: '24/7 Support', desc: 'We are always available on WhatsApp to help you and your customers with any issues.' },
   { icon: '📱', title: 'Setup Assistance', desc: 'We help you set up your first customers and guide you through the panel step by step.' },
 ];
 
 const packages = [
-  { name: 'Starter', credits: '10 Credits', price: 'PKR 6,500', perCredit: 'PKR 650 / credit', features: ['10 customer activations', 'All 3 servers', 'Panel access', 'WhatsApp support'], featured: false, waMsg: 'Hello HorizonStream IPTV! I want the Starter Reseller Package (10 Credits) for PKR 6,500.' },
-  { name: 'Growth', credits: '25 Credits', price: 'PKR 14,500', perCredit: 'PKR 580 / credit', features: ['25 customer activations', 'All 3 servers', 'Panel access', 'Priority support', 'Save PKR 1,750'], featured: true, waMsg: 'Hello HorizonStream IPTV! I want the Growth Reseller Package (25 Credits) for PKR 14,500.' },
-  { name: 'Pro', credits: '50 Credits', price: 'PKR 25,000', perCredit: 'PKR 500 / credit', features: ['50 customer activations', 'All 3 servers', 'Panel access', 'Priority support', 'Best margin'], featured: false, waMsg: 'Hello HorizonStream IPTV! I want the Pro Reseller Package (50 Credits) for PKR 25,000.' },
+  { name: 'Starter', credits: '10 Credits', price: 'PKR 6,500', perCredit: 'PKR 650 / credit', features: ['10 customer activations', 'All 21 servers', 'Panel access', 'WhatsApp support'], featured: false, waMsg: 'Hello HorizonStream IPTV! I want the Starter Reseller Package (10 Credits) for PKR 6,500.' },
+  { name: 'Growth', credits: '25 Credits', price: 'PKR 14,500', perCredit: 'PKR 580 / credit', features: ['25 customer activations', 'All 21 servers', 'Panel access', 'Priority support', 'Save PKR 1,750'], featured: true, waMsg: 'Hello HorizonStream IPTV! I want the Growth Reseller Package (25 Credits) for PKR 14,500.' },
+  { name: 'Pro', credits: '50 Credits', price: 'PKR 25,000', perCredit: 'PKR 500 / credit', features: ['50 customer activations', 'All 21 servers', 'Panel access', 'Priority support', 'Best margin'], featured: false, waMsg: 'Hello HorizonStream IPTV! I want the Pro Reseller Package (50 Credits) for PKR 25,000.' },
 ];
 
 const steps = [
@@ -58,9 +58,9 @@ export default function Reseller() {
   return (
     <>
       <SEOHead
-        title="IPTV Reseller Panel — Become an IPTV Reseller | HorizonStream IPTV"
+        title="IPTV Reseller Panel 2026 — Buy IPTV Credits & Start an IPTV Business"
         description="Become a HorizonStream IPTV reseller. High profit margins, instant reseller panel access, wholesale credit packages, and full technical support — get started on WhatsApp today."
-        keywords="IPTV reseller panel, become IPTV reseller, IPTV reseller Pakistan, wholesale IPTV credits, IPTV reseller business, StarShare reseller, Opplex reseller"
+        keywords="IPTV reseller panel, best IPTV reseller panel, become IPTV reseller, IPTV reseller program, IPTV reseller Pakistan, IPTV reseller UK, buy IPTV credits, wholesale IPTV credits, IPTV panel for resellers, start IPTV business, sub reseller IPTV panel, StarShare reseller, Opplex reseller, B1G reseller, IPTV resell"
         canonical={`${SITE_URL}/reseller`}
         structuredData={[breadcrumbSchema, resellerServiceSchema]}
       />

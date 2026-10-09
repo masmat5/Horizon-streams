@@ -9,6 +9,11 @@ const faqs = [
   { q: 'What is the difference between StarShare, Opplex, and B1G servers?', a: 'StarShare specializes in live sports and global channels, Opplex offers a massive VOD movie/series library, and B1G provides uncompressed 4K Ultra HD streams.' },
   { q: 'How do I become an IPTV reseller?', a: 'We offer an instant IPTV Reseller Panel with high margins and sub-panel management. Contact our sales team on WhatsApp for pricing and panel activation.' },
   { q: 'Is there any buffering or freezing during live sports?', a: 'Our anti-freeze technology and load-balanced servers guarantee 99.9% uptime with buffer-free streaming across all internet connections.' },
+  { q: 'What is the best IPTV subscription?', a: 'The best IPTV subscription has stable servers, real 4K quality, a free trial, wide device support and fast support. HorizonStream IPTV offers 21 premium servers, 10,000+ live channels, a free trial and plans from £10/month so you can test before you buy.' },
+  { q: 'How do I set up IPTV on Firestick or Smart TV?', a: 'Install IPTV Smarters Pro or TiviMate on your Firestick, Android TV or Smart TV, then enter the Xtream Codes login or M3U link we send you on WhatsApp. Setup takes about 5 minutes. See our step-by-step Firestick guide in Latest News.' },
+  { q: 'Do you offer 4K IPTV and live sports channels?', a: 'Yes. Servers like B1G, Strong4K, Smart4K and Dream8K are built for 4K Ultra HD streaming, while StarShare, DoomTV and GloTV focus on live sports and international channels.' },
+  { q: 'Which IPTV player app is best, Smarters Pro or TiviMate?', a: 'IPTV Smarters Pro is free and works on almost every device, including iPhone and Smart TV. TiviMate is great on Firestick and Android TV with a better TV guide. Both work with every HorizonStream IPTV plan.' },
+  { q: 'How much does an IPTV subscription cost?', a: 'HorizonStream IPTV plans start at £10 for 1 month, £25 for 3 months, £45 for 6 months and £80 for 1 year, with access to all premium servers.' },
 ];
 
 export default function FAQ() {

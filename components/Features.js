@@ -1,5 +1,5 @@
 const features = [
-  { icon: '📡', title: 'Stable Servers', desc: '99.9% uptime guaranteed across all three servers. No buffering, no interruptions.' },
+  { icon: '📡', title: 'Stable Servers', desc: '99.9% uptime guaranteed across all 21 premium servers. No buffering, no interruptions.' },
   { icon: '🌍', title: '10,000+ Channels', desc: 'Local, international, sports, movies, news, and kids content — all in one place.' },
   { icon: '📱', title: 'All Devices', desc: 'Works on Smart TV, Android, iOS, Windows, Fire Stick, and any IPTV-compatible device.' },
   { icon: '⚡', title: 'Instant Activation', desc: 'Order on WhatsApp and get activated within minutes. No waiting, no forms.' },
