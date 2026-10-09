@@ -3,19 +3,18 @@ import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
 import FloatingWA from '../../components/FloatingWA';
 import SEOHead, { SITE_URL } from '../../components/SEOHead';
-import { getPublishedBySlug, listPublished } from '../../lib/posts';
+import { getPublishedBySlug, recentPosts, archiveMonths } from '../../lib/posts';
 import { CATEGORIES as catColor, formatDate, monthLabel } from '../../lib/blogConfig';
 
 export async function getServerSideProps({ params, res }) {
   const post = await getPublishedBySlug(params.slug);
   if (!post) return { notFound: true };
-  const recent = (await listPublished({ limit: 6 })).filter((p) => p.id !== post.id).slice(0, 4);
+  const [recent, archives] = await Promise.all([recentPosts(4, post.id), archiveMonths()]);
   res.setHeader('Cache-Control', 'public, s-maxage=60, stale-while-revalidate=300');
-  return { props: { post, recent } };
+  return { props: { post, recent, archives } };
 }
 
-export default function PostPage({ post, recent }) {
-  const archives = [...new Set([post, ...recent].map((p) => monthLabel(p.publishedAt)))];
+export default function PostPage({ post, recent, archives }) {
   const postUrl = `${SITE_URL}/latest-news/${post.slug}`;
 
   const breadcrumbSchema = {
@@ -102,7 +101,7 @@ export default function PostPage({ post, recent }) {
           <div className="widget">
             <h3 className="widget-title">Archives</h3>
             <ul className="recent-list">
-              {archives.map((m) => (<li key={m}><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg><span>{m}</span></li>))}
+              {archives.map((iso) => monthLabel(iso)).map((m) => (<li key={m}><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg><span>{m}</span></li>))}
             </ul>
           </div>
         </aside>

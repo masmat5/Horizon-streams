@@ -1,13 +1,23 @@
 import { useState } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import styles from '../../styles/admin.module.css';
 import AdminBar from '../../components/AdminBar';
+import Pagination from '../../components/Pagination';
 import { adminOnly } from '../../lib/adminSSR';
-import { listAll } from '../../lib/posts';
+import { listAdmin } from '../../lib/posts';
 import { formatDate } from '../../lib/blogConfig';
+import { api } from '../../lib/clientApi';
 
-export const getServerSideProps = adminOnly(async () => ({ props: { initialPosts: await listAll() } }));
+export const getServerSideProps = adminOnly(async ({ query }) => {
+  try {
+    return { props: { ...(await listAdmin({ page: query.page })), loadError: false } };
+  } catch (err) {
+    console.error('[admin] could not load posts:', err.message);
+    return { props: { posts: [], total: 0, totalPages: 1, page: 1, loadError: true } };
+  }
+});
 
 function statusOf(p) {
   if (p.status === 'draft') return ['Draft', styles.draft];
@@ -15,34 +25,28 @@ function statusOf(p) {
   return ['Live', styles.live];
 }
 
-export default function AdminPosts({ initialPosts }) {
-  const [posts, setPosts] = useState(initialPosts);
-  const [msg, setMsg] = useState(null);
+export default function AdminPosts({ posts, total, totalPages, page, loadError }) {
+  const router = useRouter();
+  const [msg, setMsg] = useState(loadError ? { type: 'err', text: 'Could not load posts. Check the database connection and refresh.' } : null);
   const [busy, setBusy] = useState(false);
 
   async function remove(post) {
     if (!window.confirm(`Delete "${post.title}"? This cannot be undone.`)) return;
-    const res = await fetch(`/api/admin/posts/${post.id}`, { method: 'DELETE' });
-    if (res.ok) {
-      setPosts((list) => list.filter((p) => p.id !== post.id));
-      setMsg({ type: 'ok', text: 'Post deleted.' });
-    } else {
-      setMsg({ type: 'err', text: (await res.json()).error || 'Delete failed' });
-    }
+    setBusy(true);
+    const r = await api(`/api/admin/posts/${post.id}`, { method: 'DELETE' });
+    setBusy(false);
+    if (!r.ok) return setMsg({ type: 'err', text: r.error });
+    setMsg({ type: 'ok', text: 'Post deleted.' });
+    return router.replace(router.asPath);
   }
 
   async function importStarter() {
     setBusy(true);
-    const res = await fetch('/api/admin/seed', { method: 'POST' });
-    const data = await res.json();
-    if (res.ok) {
-      const list = await (await fetch('/api/admin/posts')).json();
-      setPosts(list.posts);
-      setMsg({ type: 'ok', text: `Imported ${data.imported} starter posts.` });
-    } else {
-      setMsg({ type: 'err', text: data.error || 'Import failed' });
-    }
+    const r = await api('/api/admin/seed', { method: 'POST' });
     setBusy(false);
+    if (!r.ok) return setMsg({ type: 'err', text: r.error });
+    setMsg({ type: 'ok', text: `Imported ${r.data.imported} starter posts.` });
+    return router.replace(router.asPath);
   }
 
   return (
@@ -54,17 +58,19 @@ export default function AdminPosts({ initialPosts }) {
       <AdminBar />
       <main className={styles.wrap}>
         <div className={styles.head}>
-          <h1 className={styles.title}>Blog posts ({posts.length})</h1>
+          <h1 className={styles.title}>Blog posts ({total})</h1>
           <Link href="/admin/posts/new" className={styles.btn}>+ New post</Link>
         </div>
         {msg && <div className={`${styles.notice} ${msg.type === 'ok' ? styles.ok : styles.err}`}>{msg.text}</div>}
         <div className={styles.card}>
           {posts.length === 0 ? (
             <div className={styles.empty}>
-              <p>No posts yet.</p>
-              <p style={{ marginTop: 12 }}>
-                <button className={styles.btn} onClick={importStarter} disabled={busy}>{busy ? 'Importing…' : 'Import the 9 starter posts'}</button>
-              </p>
+              <p>{loadError ? 'Posts could not be loaded.' : 'No posts yet.'}</p>
+              {!loadError && (
+                <p style={{ marginTop: 12 }}>
+                  <button className={styles.btn} onClick={importStarter} disabled={busy}>{busy ? 'Importing…' : 'Import the 9 starter posts'}</button>
+                </p>
+              )}
             </div>
           ) : (
             <table className={styles.table}>
@@ -87,7 +93,7 @@ export default function AdminPosts({ initialPosts }) {
                         <div className={styles.actions}>
                           {label === 'Live' && <a className={`${styles.btn} ${styles.btnGhost} ${styles.small}`} href={`/latest-news/${p.slug}`} target="_blank" rel="noopener noreferrer">View</a>}
                           <Link className={`${styles.btn} ${styles.btnGhost} ${styles.small}`} href={`/admin/posts/${p.id}`}>Edit</Link>
-                          <button className={`${styles.btn} ${styles.btnDanger} ${styles.small}`} onClick={() => remove(p)}>Delete</button>
+                          <button className={`${styles.btn} ${styles.btnDanger} ${styles.small}`} disabled={busy} onClick={() => remove(p)}>Delete</button>
                         </div>
                       </td>
                     </tr>
@@ -97,6 +103,7 @@ export default function AdminPosts({ initialPosts }) {
             </table>
           )}
         </div>
+        <Pagination basePath="/admin" page={page} totalPages={totalPages} />
       </main>
     </div>
   );

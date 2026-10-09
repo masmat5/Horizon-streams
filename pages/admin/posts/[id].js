@@ -5,6 +5,7 @@ import styles from '../../../styles/admin.module.css';
 import AdminBar from '../../../components/AdminBar';
 import { adminOnly } from '../../../lib/adminSSR';
 import { getById, CATEGORIES } from '../../../lib/posts';
+import { api } from '../../../lib/clientApi';
 
 export const getServerSideProps = adminOnly(async ({ params }) => {
   if (params.id === 'new') return { props: { post: null, categories: CATEGORIES } };
@@ -62,30 +63,32 @@ export default function PostEditor({ post, categories }) {
 
   async function upload(file, intoContent) {
     if (!file) return;
+    if (file.size > 5 * 1024 * 1024) return setMsg({ type: 'err', text: 'Image is larger than 5 MB' });
     setMsg({ type: 'ok', text: 'Uploading image…' });
-    const res = await fetch('/api/admin/upload', { method: 'POST', body: file });
-    const data = await res.json();
-    if (!res.ok) return setMsg({ type: 'err', text: data.error || 'Upload failed' });
+    const r = await api('/api/admin/upload', { method: 'POST', raw: file });
+    if (!r.ok) return setMsg({ type: 'err', text: r.error });
     setMsg({ type: 'ok', text: 'Image uploaded.' });
-    if (intoContent) wrap(`<img src="${data.url}" alt="" />`, '');
-    else setForm((f) => ({ ...f, image: data.url }));
+    if (intoContent) wrap(`<img src="${r.data.url}" alt="" />`, '');
+    else setForm((f) => ({ ...f, image: r.data.url }));
     return undefined;
   }
 
   async function save(statusOverride) {
+    if (!form.title.trim()) return setMsg({ type: 'err', text: 'Title is required' });
+    if (!form.content.trim()) return setMsg({ type: 'err', text: 'Post content is required' });
+    const when = new Date(form.publishedAt);
+    if (Number.isNaN(when.getTime())) return setMsg({ type: 'err', text: 'Choose a valid publish date' });
+
     setBusy(true);
     setMsg(null);
-    const body = { ...form, status: statusOverride || form.status, publishedAt: new Date(form.publishedAt).toISOString() };
-    const res = await fetch(isNew ? '/api/admin/posts' : `/api/admin/posts/${post.id}`, {
+    const r = await api(isNew ? '/api/admin/posts' : `/api/admin/posts/${post.id}`, {
       method: isNew ? 'POST' : 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body),
+      body: { ...form, status: statusOverride || form.status, publishedAt: when.toISOString() },
     });
-    const data = await res.json();
     setBusy(false);
-    if (!res.ok) return setMsg({ type: 'err', text: data.error || 'Save failed' });
-    if (isNew) return router.replace(`/admin/posts/${data.post.id}`);
-    setForm((f) => ({ ...f, slug: data.post.slug, status: data.post.status }));
+    if (!r.ok) return setMsg({ type: 'err', text: r.error });
+    if (isNew) return router.replace(`/admin/posts/${r.data.post.id}`);
+    setForm((f) => ({ ...f, slug: r.data.post.slug, status: r.data.post.status }));
     return setMsg({ type: 'ok', text: 'Saved.' });
   }
 

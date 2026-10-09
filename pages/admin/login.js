@@ -3,6 +3,7 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import styles from '../../styles/admin.module.css';
 import { getSession } from '../../lib/auth';
+import { api } from '../../lib/clientApi';
 
 export async function getServerSideProps({ req }) {
   if (getSession(req)) return { redirect: { destination: '/admin', permanent: false } };
@@ -20,19 +21,13 @@ export default function AdminLogin() {
     e.preventDefault();
     setBusy(true);
     setError('');
-    try {
-      const res = await fetch('/api/admin/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'Login failed');
-      router.push('/admin');
-    } catch (err) {
-      setError(err.message);
+    const r = await api('/api/admin/login', { method: 'POST', body: { email, password }, loginRedirect: false });
+    if (!r.ok) {
+      setError(r.error);
       setBusy(false);
+      return;
     }
+    router.push('/admin');
   }
 
   return (

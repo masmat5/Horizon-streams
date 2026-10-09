@@ -1,0 +1,46 @@
+name: CI
+
+# Runs on every push and pull request to main and staging.
+# Hostinger deploys main automatically, so main must only ever receive code that passed this workflow
+# (protect the branch: Settings > Branches > "Require status checks" > "test-and-build").
+on:
+  push:
+    branches: [main, staging]
+  pull_request:
+    branches: [main, staging]
+
+jobs:
+  test-and-build:
+    runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:8.4
+        env:
+          MYSQL_ROOT_PASSWORD: ci-root-password
+          MYSQL_DATABASE: horizonstream_test
+        ports: ['3306:3306']
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -pci-root-password"
+          --health-interval=5s --health-timeout=5s --health-retries=20
+    env:
+      DB_HOST: 127.0.0.1
+      DB_PORT: 3306
+      DB_USER: root
+      DB_PASSWORD: ci-root-password
+      DB_NAME: horizonstream_test
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - name: Tests (unit + MySQL integration)
+        run: npm test
+      - name: Production build
+        run: npm run build
+        env:
+          SESSION_SECRET: ci-only-secret-not-used-anywhere-else
+      - name: Dependency audit (production deps, high+ severity)
+        run: npm audit --omit=dev --audit-level=high
+        continue-on-error: true

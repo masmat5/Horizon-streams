@@ -52,6 +52,48 @@ Needs a Hostinger plan with **Node.js Web App** support (Business / Cloud hostin
 
 ---
 
+---
+
+## Release workflow: test -> staging -> live
+
+Hostinger deploys automatically on every push, so the branches are the safety net:
+
+| Branch | Deploys to | Purpose |
+|---|---|---|
+| `staging` | `staging.horizonstreamiptv.com` (second Node.js app, its **own** database + env vars) | try every change here first |
+| `main` | `horizonstreamiptv.com` (live) | only receives code that already passed CI and staging |
+
+1. Work on a feature branch, push it, open a pull request into `staging`.
+2. GitHub Actions (`.github/workflows/ci.yml`) runs the tests (unit + real MySQL) and a production build. Red = do not merge.
+3. Merge to `staging`, wait for the staging deploy, click through the site and `/admin`.
+4. Open a pull request `staging` -> `main`. CI must be green. Merge = live deploy.
+5. In GitHub: Settings -> Branches -> protect `main` (require pull request + the `test-and-build` check, no direct pushes).
+
+**Version lock:** `package-lock.json` is committed and installs use `npm ci`; dependency versions in `package.json` are exact (no `^`), `.npmrc` keeps it that way; Node is pinned in `.nvmrc` / `engines` (20+). Upgrade dependencies deliberately, in their own pull request.
+
+Run the tests locally:
+```bash
+npm test                          # unit tests (database tests are skipped)
+DB_NAME=horizonstream_test npm test   # + MySQL integration tests (database name must end in _test)
+```
+
+---
+
+## Monitoring and backups
+
+- **Uptime:** point an uptime monitor (UptimeRobot / Better Stack, free) at `https://horizonstreamiptv.com/api/health`. 200 = site and database OK, 503 = database problem. Add an email/WhatsApp alert.
+- **Logs:** errors are written to the Node app log (hPanel -> the Node.js app -> Logs). `[api]`, `[latest-news]`, `[health]` prefixes tell you where.
+- **Posts backup:** `Backup` link in the admin bar downloads every post as JSON. For automatic copies add a Hostinger cron job: `cd <app folder> && npm run backup` (keeps the newest 30 in `backups/`). Restore: `npm run restore -- backups/<file>.json`.
+- **Whole-site backup:** Hostinger takes daily backups (hPanel -> Backups) of files and databases; download one before big changes.
+- **Uploads:** keep `UPLOAD_DIR` outside the app folder and include it in your backups.
+
+## Performance notes
+
+- Blog queries are cached in memory for 60 s (and de-duplicated under load); any admin save clears the cache.
+- List pages are paginated (10 per page); list queries never load post bodies.
+- DB indexes: unique `slug`, and `(status, published_at)` for the blog list. Search uses `LIKE` (fine for hundreds of posts; move to FULLTEXT if the blog grows to thousands).
+- Pages send `Cache-Control: s-maxage=60`: enable **CDN** in hPanel so repeat visitors are served without touching Node.
+
 ## Structure
 
 ```

@@ -1,5 +1,4 @@
 import '../styles/globals.css';
-import { SpeedInsights } from '@vercel/speed-insights/next';
 import SEOHead, { SITE_URL, SITE_NAME } from '../components/SEOHead';
 
 // Sitewide Organization + WebSite structured data (rendered on every page,
@@ -38,7 +37,6 @@ export default function App({ Component, pageProps }) {
     <>
       <SEOHead structuredData={[organizationSchema, websiteSchema]} />
       <Component {...pageProps} />
-      <SpeedInsights />
     </>
   );
 }

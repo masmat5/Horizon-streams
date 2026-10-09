@@ -16,7 +16,7 @@ const plansSchema = {
   '@context': 'https://schema.org',
   '@type': 'Product',
   name: 'HorizonStream IPTV Subscription',
-  description: 'Premium IPTV subscription with access to StarShare, Opplex, B1G and 15+ servers, 10,000+ live channels, and 4K/8K Ultra HD streaming.',
+  description: 'Premium IPTV subscription with access to StarShare, Opplex, B1G and 21 servers, 10,000+ live channels, and 4K/8K Ultra HD streaming.',
   brand: { '@type': 'Brand', name: 'HorizonStream IPTV' },
   offers: plans.map((plan) => ({
     '@type': 'Offer',

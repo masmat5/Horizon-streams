@@ -10,7 +10,7 @@ const WaIcon = () => (
 
 const stats = [
   { value: '10,000+', label: 'Live Channels' },
-  { value: '15+', label: 'Premium Servers' }, 
+  { value: '21', label: 'Premium Servers' }, 
   { value: '99.9%', label: 'Uptime Verified' },
   { value: '4K/8K', label: 'Ultra HD Quality' },
 ];
@@ -26,7 +26,7 @@ export default function Hero() {
     // Interactive engagement response simulator
     setSearchResult({
       checking: true,
-      text: `Searching for "${searchQuery}" across 15+ servers...`
+      text: `Searching for "${searchQuery}" across 21 servers...`
     });
 
     setTimeout(() => {

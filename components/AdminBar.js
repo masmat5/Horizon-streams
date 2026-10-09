@@ -1,12 +1,13 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import styles from '../styles/admin.module.css';
+import { api } from '../lib/clientApi';
 
 export default function AdminBar() {
   const router = useRouter();
   async function logout() {
-    await fetch('/api/admin/logout', { method: 'POST' });
-    router.push('/admin/login');
+    await api('/api/admin/logout', { method: 'POST', loginRedirect: false });
+    router.push('/admin/login'); // even if the call failed, leaving the panel is the safe default
   }
   return (
     <header className={styles.bar}>
@@ -14,6 +15,7 @@ export default function AdminBar() {
       <nav className={styles.barLinks}>
         <Link href="/admin">Posts</Link>
         <Link href="/admin/posts/new">New post</Link>
+        <a href="/api/admin/backup">Backup ↓</a>
         <a href="/latest-news" target="_blank" rel="noopener noreferrer">View blog ↗</a>
         <button className={`${styles.btn} ${styles.btnGhost} ${styles.small}`} onClick={logout}>Log out</button>
       </nav>

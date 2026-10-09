@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import crypto from 'crypto';
+import { handle } from '../../../lib/api';
 import { requireAdmin } from '../../../lib/auth';
 
 export const config = { api: { bodyParser: false } };
@@ -16,9 +17,8 @@ function detectExt(b) {
   return null;
 }
 
-export default async function handler(req, res) {
-  if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
-  if (!requireAdmin(req, res)) return;
+export default handle(['POST'], async (req, res) => {
+  if (!requireAdmin(req, res)) return undefined;
 
   const chunks = [];
   let size = 0;
@@ -37,8 +37,8 @@ export default async function handler(req, res) {
   if (!ext) return res.status(400).json({ error: 'Only JPG, PNG, WEBP or GIF images are allowed' });
 
   const dir = process.env.UPLOAD_DIR || path.join(process.cwd(), 'uploads');
-  fs.mkdirSync(dir, { recursive: true });
   const name = `${Date.now()}-${crypto.randomBytes(5).toString('hex')}.${ext}`;
-  fs.writeFileSync(path.join(dir, name), data);
+  await fs.promises.mkdir(dir, { recursive: true });
+  await fs.promises.writeFile(path.join(dir, name), data);
   return res.status(201).json({ url: `/uploads/${name}` });
-}
+});

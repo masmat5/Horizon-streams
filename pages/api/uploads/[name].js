@@ -16,5 +16,7 @@ export default function handler(req, res) {
   res.setHeader('Content-Type', TYPES[name.split('.').pop()]);
   res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
   res.setHeader('X-Content-Type-Options', 'nosniff');
-  return fs.createReadStream(file).pipe(res);
+  const stream = fs.createReadStream(file);
+  stream.on('error', () => { if (!res.headersSent) res.status(500).end(); else res.destroy(); });
+  return stream.pipe(res);
 }

@@ -1,4 +1,4 @@
-import { listPublished } from '../lib/posts';
+import { listSlugs } from '../lib/posts';
 
 const SITE_URL = process.env.SITE_URL || 'https://horizonstreamiptv.com';
 
@@ -12,7 +12,12 @@ const STATIC_PAGES = [
 const esc = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;');
 
 export async function getServerSideProps({ res }) {
-  const posts = await listPublished({ limit: 1000 });
+  let posts = [];
+  try {
+    posts = await listSlugs();
+  } catch (err) {
+    console.error('[sitemap] database error, serving static pages only:', err.message);
+  }
   const urls = [
     ...STATIC_PAGES.map((p) => ({ ...p, lastmod: null })),
     ...posts.map((p) => ({ path: `/latest-news/${p.slug}`, changefreq: 'monthly', priority: '0.6', lastmod: p.updatedAt })),

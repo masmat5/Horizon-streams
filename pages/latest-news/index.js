@@ -3,7 +3,8 @@ import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
 import FloatingWA from '../../components/FloatingWA';
 import SEOHead, { SITE_URL } from '../../components/SEOHead';
-import { listPublished } from '../../lib/posts';
+import Pagination, { pageHref } from '../../components/Pagination';
+import { listPublished, archiveMonths } from '../../lib/posts';
 import { CATEGORIES as catColor, formatDate, monthLabel } from '../../lib/blogConfig';
 
 const breadcrumbSchema = {
@@ -33,21 +34,27 @@ const makeBlogSchema = (posts) => ({
 
 export async function getServerSideProps({ query, res }) {
   const search = typeof query.s === 'string' ? query.s.trim().slice(0, 80) : '';
-  const posts = await listPublished({ search });
-  res.setHeader('Cache-Control', 'public, s-maxage=60, stale-while-revalidate=300');
-  return { props: { posts, search } };
+  try {
+    const [list, archives] = await Promise.all([listPublished({ search, page: query.page }), archiveMonths()]);
+    res.setHeader('Cache-Control', 'public, s-maxage=60, stale-while-revalidate=300');
+    return { props: { posts: list.posts, page: list.page, totalPages: list.totalPages, archives, search, unavailable: false } };
+  } catch (err) {
+    console.error('[latest-news] database error:', err.message);
+    res.statusCode = 503;
+    res.setHeader('Retry-After', '60');
+    return { props: { posts: [], page: 1, totalPages: 1, archives: [], search, unavailable: true } };
+  }
 }
 
-export default function LatestNews({ posts, search }) {
-  const archives = [...new Set(posts.map((p) => monthLabel(p.publishedAt)))].slice(0, 8);
+export default function LatestNews({ posts, page, totalPages, archives, search, unavailable }) {
   return (
     <>
       <SEOHead
         title="Latest News & IPTV Guides — HorizonStream IPTV Blog"
         description="IPTV streaming tips, server updates, and step-by-step setup guides from the HorizonStream IPTV team. Stay up to date on StarShare, Opplex, and B1G server news."
         keywords="best IPTV, best IPTV apps, IPTV Smarters Pro setup, TiviMate setup, how to setup IPTV on Firestick, IPTV on Smart TV, IPTV buying guide, IPTV news, IPTV streaming tips, StarShare updates, Opplex updates, B1G server news"
-        canonical={`${SITE_URL}/latest-news`}
-        noindex={!!search}
+        canonical={`${SITE_URL}${pageHref('/latest-news', page)}`}
+        noindex={!!search || unavailable}
         structuredData={[breadcrumbSchema, makeBlogSchema(posts)]}
       />
       <Navbar />
@@ -67,7 +74,7 @@ export default function LatestNews({ posts, search }) {
         {/* Posts */}
         <main className="posts-col">
           {posts.length === 0 && (
-            <p className="post-excerpt">{search ? `No posts found for "${search}".` : 'New posts are coming soon.'}</p>
+            <p className="post-excerpt">{unavailable ? 'The blog is temporarily unavailable. Please try again in a minute.' : search ? `No posts found for "${search}".` : 'New posts are coming soon.'}</p>
           )}
           {posts.map((post) => (
             <article key={post.id} className="post-card">
@@ -88,6 +95,7 @@ export default function LatestNews({ posts, search }) {
               </div>
             </article>
           ))}
+          <Pagination basePath="/latest-news" page={page} totalPages={totalPages} extra={{ s: search }} />
         </main>
 
         {/* Sidebar */}
@@ -117,7 +125,7 @@ export default function LatestNews({ posts, search }) {
           <div className="widget">
             <h3 className="widget-title">Archives</h3>
             <ul className="recent-list">
-              {archives.map((m) => (
+              {archives.map((iso) => monthLabel(iso)).map((m) => (
                 <li key={m}><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg><span>{m}</span></li>
               ))}
             </ul>

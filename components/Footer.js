@@ -22,9 +22,10 @@ export default function Footer() {
               </div>
               <div className="links-col">
                 <h4>Plans</h4>
-                <button onClick={() => openWhatsApp('Hello HorizonStream IPTV! I want the 1 Month plan.')}>3 Month</button>
-                <button onClick={() => openWhatsApp('Hello HorizonStream IPTV! I want the 3 Month plan.')}>6 Months</button>
-                <button onClick={() => openWhatsApp('Hello HorizonStream IPTV! I want the 1 Year plan.')}>1 Year</button>
+                <button onClick={() => openWhatsApp('Hello HorizonStream IPTV! I would like to order the 1 Month plan.')}>1 Month</button>
+                <button onClick={() => openWhatsApp('Hello HorizonStream IPTV! I would like to order the 3 Months plan.')}>3 Months</button>
+                <button onClick={() => openWhatsApp('Hello HorizonStream IPTV! I would like to order the 6 Months plan.')}>6 Months</button>
+                <button onClick={() => openWhatsApp('Hello HorizonStream IPTV! I would like to order the 1 Year plan.')}>1 Year</button>
               </div>
               <div className="links-col">
                 <h4>Quick Links</h4>
