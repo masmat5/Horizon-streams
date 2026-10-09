@@ -81,7 +81,7 @@ export default function LatestNews({ posts, page, totalPages, archives, search, 
               {post.image && (
                 <div className="post-img-wrap">
                   <img src={post.image} alt={post.title} className="post-img" loading="lazy" />
-                  <span className="post-cat" style={{ background: catColor[post.category] || '#7c3aed' }}>{post.category}</span>
+                  <span className="post-cat" style={{ background: catColor[post.category] || '#0f8a7a' }}>{post.category}</span>
                 </div>
               )}
               <div className="post-body">
@@ -139,12 +139,13 @@ export default function LatestNews({ posts, page, totalPages, archives, search, 
       <style jsx>{`
         .news-hero { position:relative;height:240px;display:flex;align-items:center;overflow:hidden; }
         .news-hero-bg { position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=1600&q=60') center/cover no-repeat;filter:brightness(0.25); }
-        .news-hero-overlay { position:absolute;inset:0;background:linear-gradient(135deg,rgba(124,58,237,0.3) 0%,rgba(6,182,212,0.15) 100%); }
+        .news-hero-overlay { position:absolute;inset:0;background:linear-gradient(135deg,rgba(15,138,122,0.3) 0%,rgba(232,101,74,0.15) 100%); }
         .news-hero-content { position:relative;z-index:2;padding:0 2rem;max-width:1200px;margin:0 auto;width:100%; }
         .breadcrumb { display:flex;align-items:center;gap:8px;font-size:13px;color:rgba(255,255,255,0.45);margin-bottom:0.75rem; }
         .breadcrumb a { color:rgba(255,255,255,0.45);transition:color 0.2s; }
         .breadcrumb a:hover { color:#fff; }
         .breadcrumb span:last-child { color:rgba(255,255,255,0.8); }
+        .news-hero-content { color:#fff; }
         .news-hero-content h1 { font-family:var(--font-display);font-size:clamp(36px,5vw,56px);font-weight:800;letter-spacing:-1px;margin-bottom:0.25rem; }
         .gradient-text { background:var(--gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text; }
         .news-hero-content p { color:rgba(255,255,255,0.5);font-size:15px;font-weight:300; }
@@ -158,8 +159,8 @@ export default function LatestNews({ posts, page, totalPages, archives, search, 
         .post-cat { position:absolute;bottom:12px;left:16px;color:#fff;font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:4px 10px;border-radius:4px; }
         .post-body { padding:1.5rem; }
         .post-title { font-size:20px;font-weight:700;line-height:1.4;margin-bottom:0.75rem; }
-        .post-title a { color:#fff;transition:color 0.2s; }
-        .post-title a:hover { color:var(--accent-2); }
+        .post-title a { color:var(--ink);transition:color 0.2s; }
+        .post-title a:hover { color:var(--accent-2-text); }
         .post-meta { display:flex;gap:1.25rem;margin-bottom:0.75rem;flex-wrap:wrap; }
         .post-meta span { display:flex;align-items:center;gap:5px;font-size:12px;color:var(--text-muted); }
         .post-excerpt { font-size:14px;color:var(--text-secondary);line-height:1.8;font-weight:300;margin-bottom:1.25rem; }
@@ -168,9 +169,9 @@ export default function LatestNews({ posts, page, totalPages, archives, search, 
         /* Sidebar */
         .sidebar { display:flex;flex-direction:column;gap:1.5rem; }
         .widget { background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:1.25rem; }
-        .widget-title { font-size:13px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:#fff;margin-bottom:1rem;padding-bottom:0.6rem;border-bottom:1px solid var(--border); }
+        .widget-title { font-size:13px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--ink);margin-bottom:1rem;padding-bottom:0.6rem;border-bottom:1px solid var(--border); }
         .search-box { display:flex;border:1px solid var(--border);border-radius:6px;overflow:hidden; }
-        .search-input { flex:1;background:transparent;border:none;outline:none;padding:9px 12px;font-size:13px;color:#fff;font-family:var(--font-body); }
+        .search-input { flex:1;background:transparent;border:none;outline:none;padding:9px 12px;font-size:13px;color:var(--ink);font-family:var(--font-body); }
         .search-input::placeholder { color:var(--text-muted); }
         .search-btn { background:var(--accent);border:none;padding:9px 12px;color:#fff;cursor:pointer;display:flex;align-items:center;transition:opacity 0.2s; }
         .search-btn:hover { opacity:0.85; }
@@ -178,7 +179,7 @@ export default function LatestNews({ posts, page, totalPages, archives, search, 
         .recent-list li { display:flex;align-items:flex-start;gap:7px;font-size:13px;color:var(--text-secondary);line-height:1.5; }
         .recent-list li svg { color:var(--accent);flex-shrink:0;margin-top:3px; }
         .recent-list a { color:var(--text-secondary);transition:color 0.2s; }
-        .recent-list a:hover { color:#fff; }
+        .recent-list a:hover { color:var(--ink); }
         .cat-list { list-style:none;display:flex;flex-direction:column;gap:0.65rem; }
         .cat-list li { display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text-secondary); }
         .cat-dot { width:8px;height:8px;border-radius:50%;flex-shrink:0; }

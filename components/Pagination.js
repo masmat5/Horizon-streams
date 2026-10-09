@@ -23,7 +23,7 @@ export default function Pagination({ basePath, page, totalPages, extra = {} }) {
       <style jsx>{`
         .pager { display:flex;gap:8px;justify-content:center;align-items:center;flex-wrap:wrap;margin:1rem 0 0; }
         .pager :global(a), .cur { min-width:38px;padding:8px 12px;text-align:center;border-radius:8px;border:1px solid var(--border);font-size:13px;color:var(--text-secondary); }
-        .pager :global(a:hover) { color:#fff;border-color:var(--border-hover); }
+        .pager :global(a:hover) { color:var(--ink);border-color:var(--border-hover); }
         .cur { background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600; }
       `}</style>
     </nav>

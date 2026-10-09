@@ -33,7 +33,7 @@ export default function Features() {
         .features-section { padding:5rem 2rem;background:var(--bg-primary); }
         .container { max-width:1200px;margin:0 auto; }
         .section-header { margin-bottom:3rem; }
-        .section-tag { font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--accent-2);margin-bottom:0.75rem;font-weight:600; }
+        .section-tag { font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--accent-2-text);margin-bottom:0.75rem;font-weight:600; }
         .section-title { font-family:var(--font-display);font-size:clamp(32px,5vw,52px);font-weight:800;letter-spacing:-1px; }
         .gradient-text { background:var(--gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text; }
         .features-grid { display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:2rem; }

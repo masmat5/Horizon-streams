@@ -174,14 +174,14 @@ export default function FloatingWA() {
         .pulse { position:absolute;top:-3px;right:-3px;width:12px;height:12px;background:#fff;border-radius:50%;animation:p 2.5s ease-in-out infinite; }
         
         /* NEW: Social Proof Toast Container Styles */
-        .social-proof-toast { position: fixed; bottom: 28px; left: 28px; z-index: 999; display: flex; align-items: center; gap: 12px; background: rgba(16, 16, 32, 0.9); border: 1px solid rgba(255, 255, 255, 0.08); backdrop-filter: blur(12px); padding: 12px 18px 12px 14px; border-radius: 12px; max-width: 320px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
-        .toast-icon { font-size: 20px; background: rgba(255,255,255,0.05); padding: 6px; border-radius: 8px; flex-shrink: 0; }
+        .social-proof-toast { position: fixed; bottom: 28px; left: 28px; z-index: 999; display: flex; align-items: center; gap: 12px; background: rgba(255,255,255,0.92); border: 1px solid rgba(21,32,30,0.06); backdrop-filter: blur(12px); padding: 12px 18px 12px 14px; border-radius: 12px; max-width: 320px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
+        .toast-icon { font-size: 20px; background: rgba(21,32,30,0.06); padding: 6px; border-radius: 8px; flex-shrink: 0; }
         .toast-body { display: flex; flex-direction: column; gap: 2px; }
-        .toast-text { color: #fff; font-size: 13px; margin: 0; font-family: var(--font-body); line-height: 1.4; font-weight: 300; }
-        .toast-text strong { font-weight: 600; color: #a78bfa; }
+        .toast-text { color:var(--ink); font-size: 13px; margin: 0; font-family: var(--font-body); line-height: 1.4; font-weight: 300; }
+        .toast-text strong { font-weight: 600; color: #0b6e62; }
         .toast-time { font-size: 11px; color: var(--text-muted); font-weight: 400; display: flex; align-items: center; gap: 4px; }
         .toast-close { background: none; border: none; color: var(--text-muted); font-size: 16px; cursor: pointer; position: absolute; top: 6px; right: 8px; line-height: 1; padding: 2px; }
-        .toast-close:hover { color: #fff; }
+        .toast-close:hover { color:var(--ink); }
 
         /* Animation States */
         .slice-in { transform: translateX(0); opacity: 1; pointer-events: auto; }

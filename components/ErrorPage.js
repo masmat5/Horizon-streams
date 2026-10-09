@@ -30,7 +30,7 @@ export default function ErrorPage({ code, title, text }) {
         .err-actions { display:flex;gap:12px;flex-wrap:wrap;justify-content:center; }
         .err-wrap :global(.err-btn) { background:var(--accent);color:#fff;font-weight:600;font-size:14px;padding:11px 22px;border-radius:8px; }
         .err-wrap :global(.err-btn.ghost) { background:transparent;border:1px solid var(--border);color:var(--text-secondary); }
-        .err-wrap :global(.err-btn.ghost:hover) { color:#fff;border-color:var(--border-hover); }
+        .err-wrap :global(.err-btn.ghost:hover) { color:var(--ink);border-color:var(--border-hover); }
       `}</style>
     </>
   );

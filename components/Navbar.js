@@ -9,7 +9,7 @@ export default function Navbar() {
     <>
       <nav className="navbar">
         <div className="nav-inner">
-          <Link href="/" className="logo">HorizonStream<span>IPTV</span></Link>
+          <Link href="/" className="logo"><img src="/favicon.svg" width="30" height="30" alt="" className="logo-icon" /><span className="logo-text">HorizonStream<span>IPTV</span></span></Link>
           
           <div className="nav-links desktop">
             <Link href="/#servers" className="nav-link">Servers</Link>
@@ -49,28 +49,28 @@ export default function Navbar() {
       </nav>
 
       <style jsx>{`
-        .navbar { position:sticky;top:0;z-index:100;background:rgba(6,6,15,0.93);backdrop-filter:blur(16px);border-bottom:1px solid var(--border); }
+        .navbar { position:sticky;top:0;z-index:100;background:rgba(247,245,240,0.88);backdrop-filter:blur(16px);border-bottom:1px solid var(--border); }
         .nav-inner { max-width:1200px;margin:0 auto;padding:0.9rem 2rem;display:flex;align-items:center;gap:2rem; }
-        .logo { font-family:var(--font-display);font-size:22px;font-weight:800;color:#fff;flex-shrink:0;letter-spacing:1px; }
-        .logo span { color:var(--accent); }
+        .logo { font-family:var(--font-display);font-size:22px;font-weight:800;color:var(--ink);flex-shrink:0;letter-spacing:-0.3px; display:inline-flex;align-items:center;gap:10px; }
+        .logo-text span { color:var(--accent); }
         .nav-links.desktop { display:flex;align-items:center;gap:1.75rem;flex:1; }
         .nav-link { font-size:14px;color:var(--text-secondary);font-weight:400;letter-spacing:0.3px;transition:color 0.2s;white-space:nowrap; }
         .nav-link:hover { color:var(--text-primary); }
         .nav-actions.desktop { display:flex;align-items:center; }
-        .btn-trial { background:var(--gradient);color:#fff;font-size:13px;font-weight:600;padding:9px 22px;border-radius:50px;transition:opacity 0.2s,transform 0.2s;white-space:nowrap; }
+        .btn-trial { background:var(--accent);color:#fff;font-size:13px;font-weight:600;padding:9px 22px;border-radius:50px;transition:opacity 0.2s,transform 0.2s;white-space:nowrap; }
         .btn-trial:hover { opacity:0.85;transform:translateY(-1px); }
         .hamburger { display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:4px;margin-left:auto; }
-        .hamburger span { display:block;width:22px;height:2px;background:#fff;transition:all 0.3s;border-radius:2px; }
+        .hamburger span { display:block;width:22px;height:2px;background:var(--ink);transition:all 0.3s;border-radius:2px; }
         .hamburger span.open:nth-child(1){transform:translateY(7px) rotate(45deg);}
         .hamburger span.open:nth-child(2){opacity:0;}
         .hamburger span.open:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
         
         .mobile-menu { display:flex;flex-direction:column;padding:1rem 2rem 1.5rem;gap:0.25rem;border-top:1px solid var(--border); }
         .mobile-link { font-size:15px;color:var(--text-secondary);padding:0.65rem 0;border-bottom:1px solid var(--border);transition:color 0.2s; }
-        .mobile-link:hover { color:#fff; }
+        .mobile-link:hover { color:var(--ink); }
         
         /* Mobile Free Trial Premium Styling */
-        .mobile-cta-link { margin-top:0.75rem;background:var(--gradient);color:#fff;font-size:15px;font-weight:600;padding:12px;border-radius:8px;font-family:var(--font-body);text-align:center;text-decoration:none;cursor:pointer; box-shadow: 0 4px 15px rgba(124, 58, 237, 0.25); transition: opacity 0.2s; }
+        .mobile-cta-link { margin-top:0.75rem;background:var(--accent);color:#fff;font-size:15px;font-weight:600;padding:12px;border-radius:8px;font-family:var(--font-body);text-align:center;text-decoration:none;cursor:pointer; box-shadow: 0 4px 15px rgba(15,138,122, 0.25); transition: opacity 0.2s; }
         .mobile-cta-link:hover { opacity: 0.9; }
         
         @media(max-width:768px){ .nav-links.desktop,.nav-actions.desktop{display:none;} .hamburger{display:flex;} }

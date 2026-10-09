@@ -35,7 +35,7 @@ export default function SEOHead({
       <meta name="viewport" content="width=device-width, initial-scale=1" />
       <meta name="robots" content={noindex ? 'noindex, nofollow' : 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1'} />
       <meta name="author" content={SITE_NAME} />
-      <meta name="theme-color" content="#7c3aed" />
+      <meta name="theme-color" content="#0f8a7a" />
       <link rel="canonical" href={canonical} />
 
       {/* Open Graph */}

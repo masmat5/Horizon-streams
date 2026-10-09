@@ -68,28 +68,28 @@ export default function Plans() {
         .plans-section { padding:5rem 2rem;background:var(--bg-secondary);border-top:1px solid var(--border);border-bottom:1px solid var(--border); }
         .container { max-width:1200px;margin:0 auto; }
         .section-header { margin-bottom:3rem; }
-        .section-tag { font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--accent-2);margin-bottom:0.75rem;font-weight:600; }
+        .section-tag { font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--accent-2-text);margin-bottom:0.75rem;font-weight:600; }
         .section-title { font-family:var(--font-display);font-size:clamp(32px,5vw,52px);font-weight:800;letter-spacing:-1px;margin-bottom:0.75rem; }
         .gradient-text { background:var(--gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text; }
         .section-sub { color:var(--text-secondary);font-size:15px;font-weight:300;max-width:500px;line-height:1.7; }
         .plans-grid { display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:1.5rem;align-items:start; }
         .plan-card { background:var(--bg-card);border:1px solid var(--border);border-radius:16px;padding:1.75rem;display:flex;flex-direction:column;gap:1.25rem;position:relative;transition:border-color 0.2s,transform 0.2s; }
         .plan-card:hover { border-color:var(--border-hover);transform:translateY(-2px); }
-        .plan-card.featured { border:2px solid var(--accent);background:linear-gradient(145deg,rgba(124,58,237,0.08),var(--bg-card)); }
-        .featured-badge { position:absolute;top:-14px;left:50%;transform:translateX(-50%);background:var(--gradient);color:#fff;font-size:11px;font-weight:700;padding:4px 14px;border-radius:50px;white-space:nowrap; }
+        .plan-card.featured { border:2px solid var(--accent);background:linear-gradient(145deg,rgba(15,138,122,0.08),var(--bg-card)); }
+        .featured-badge { position:absolute;top:-14px;left:50%;transform:translateX(-50%);background:var(--accent);color:#fff;font-size:11px;font-weight:700;padding:4px 14px;border-radius:50px;white-space:nowrap; }
         .plan-header { display:flex;flex-direction:column;gap:0.2rem; }
         .plan-duration { font-size:12px;color:var(--text-muted);letter-spacing:1px;text-transform:uppercase; }
-        .plan-price { font-family:var(--font-display);font-size:34px;font-weight:800;color:#fff;display:flex;align-items:baseline;gap:4px; }
+        .plan-price { font-family:var(--font-display);font-size:34px;font-weight:800;color:var(--ink);display:flex;align-items:baseline;gap:4px; }
         .plan-per { font-family:var(--font-body);font-size:13px;color:var(--text-muted);font-weight:300; }
         .plan-features { list-style:none;display:flex;flex-direction:column;gap:0.6rem;flex:1; }
         .plan-features li { display:flex;align-items:center;gap:8px;font-size:14px;color:var(--text-secondary);font-weight:300; }
-        .plan-features li :global(svg) { color:var(--accent-2);flex-shrink:0; }
-        .plan-btn { display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:12px;background:transparent;border:1px solid var(--border-hover);color:#fff;font-size:14px;font-weight:500;border-radius:8px;font-family:var(--font-body);transition:all 0.2s;cursor:pointer; }
-        .plan-btn:hover { background:rgba(255,255,255,0.06); }
+        .plan-features li :global(svg) { color:var(--accent-2-text);flex-shrink:0; }
+        .plan-btn { display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:12px;background:transparent;border:1px solid var(--border-hover);color:var(--ink);font-size:14px;font-weight:500;border-radius:8px;font-family:var(--font-body);transition:all 0.2s;cursor:pointer; }
+        .plan-btn:hover { background:rgba(21,32,30,0.06); }
         .plan-btn.featured-btn { background:var(--wa-green);border-color:var(--wa-green); }
         .plan-btn.featured-btn:hover { background:var(--wa-green-dark);border-color:var(--wa-green-dark); }
         .plans-note { margin-top:2rem;text-align:center;color:var(--text-muted);font-size:14px; }
-        .inline-link { background:none;border:none;color:var(--accent-2);font-size:14px;font-family:var(--font-body);cursor:pointer;font-weight:500;text-decoration:underline;text-underline-offset:3px; }
+        .inline-link { background:none;border:none;color:var(--accent-2-text);font-size:14px;font-family:var(--font-body);cursor:pointer;font-weight:500;text-decoration:underline;text-underline-offset:3px; }
       `}</style>
     </>
   );

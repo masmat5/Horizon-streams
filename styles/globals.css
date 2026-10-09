@@ -1,31 +1,32 @@
-@import url('https://fonts.googleapis.com/css2?family=Cabinet+Grotesk:wght@700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
-
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --bg-primary:    #06060f;
-  --bg-secondary:  #0c0c1e;
-  --bg-card:       #10102a;
-  --bg-card-hover: #161635;
-  --accent:        #7c3aed;
-  --accent-2:      #06b6d4;
-  --accent-soft:   rgba(124,58,237,0.15);
-  --accent-glow:   rgba(124,58,237,0.35);
-  --wa-green:      #25D366;
-  --wa-green-dark: #1ebe5d;
-  --text-primary:  #f1f0ff;
-  --text-secondary:#9b9bc0;
-  --text-muted:    #4a4a6a;
-  --border:        rgba(124,58,237,0.15);
-  --border-hover:  rgba(124,58,237,0.45);
-  --gradient:      linear-gradient(135deg, #7c3aed 0%, #06b6d4 100%);
-  
-  /* --- Fonts Style Changed --- */
-  --font-display:  'Cabinet Grotesk', sans-serif;
-  --font-body:     'Plus Jakarta Sans', sans-serif;
+  --bg-primary:    #f7f5f0;
+  --bg-secondary:  #efece4;
+  --bg-card:       #ffffff;
+  --bg-card-hover: #fbfaf7;
+  --accent:        #0f8a7a;
+  --accent-dark:   #0b6e62;
+  --accent-2:      #e8654a;
+  --accent-2-text: #c2452b;
+  --accent-soft:   rgba(15,138,122,0.10);
+  --accent-glow:   rgba(15,138,122,0.28);
+  --wa-green:      #12a37a;
+  --wa-green-dark: #0e8a67;
+  --ink:           #15201e;
+  --text-primary:  #15201e;
+  --text-secondary:#56625f;
+  --text-muted:    #8a948f;
+  --border:        rgba(21,32,30,0.09);
+  --border-hover:  rgba(15,138,122,0.42);
+  --gradient:      linear-gradient(135deg, #0f8a7a 0%, #e8654a 100%);
+  --shadow-card:   0 1px 2px rgba(21,32,30,0.04), 0 8px 24px rgba(21,32,30,0.05);
 
-  /* --- Global Font Sizes (Reduced & Optimized) --- */
-  --fs-base:       14px; /* Default body font thora chota kr dia hai */
+  --font-display:  'Plus Jakarta Sans', system-ui, sans-serif;
+  --font-body:     'Inter', system-ui, sans-serif;
+  --font-mono:     'JetBrains Mono', ui-monospace, Menlo, Consolas, monospace;
+
+  --fs-base:       14px;
   --fs-sm:         12px;
   --fs-md:         16px;
   --fs-lg:         20px;
@@ -51,10 +52,15 @@ img { max-width: 100%; height: auto; display: block; }
 /* --- Headings configuration using new sizes & style --- */
 h1, .h1 { font-family: var(--font-display); font-size: var(--fs-h1); font-weight: 800; letter-spacing: -0.5px; }
 h2, .h2 { font-family: var(--font-display); font-size: var(--fs-xl); font-weight: 700; }
-h3, .h3 { font-family: var(--font-body); font-size: var(--fs-lg); font-weight: 600; }
+h3, .h3 { font-family: var(--font-display); font-size: var(--fs-lg); font-weight: 600; }
 p { font-size: var(--fs-base); color: var(--text-secondary); }
 small, .text-sm { font-size: var(--fs-sm); }
 
 ::-webkit-scrollbar { width: 5px; }
 ::-webkit-scrollbar-track { background: var(--bg-primary); }
-::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 3px; }
+::-webkit-scrollbar-thumb { background: rgba(15,138,122,0.55); border-radius: 3px; }
+
+::selection { background: rgba(15,138,122,0.22); }
+
+/* small technical labels use the mono face, like the node monitor in the design */
+.mono { font-family: var(--font-mono); }
