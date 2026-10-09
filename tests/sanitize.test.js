@@ -23,3 +23,8 @@ test('handles empty and nullish input', () => {
   assert.equal(cleanContent(null), '');
   assert.equal(cleanContent(undefined), '');
 });
+
+test('removes empty paragraphs but keeps picture paragraphs', () => {
+  assert.equal(cleanContent('<p>Hi</p><p></p><p> </p>'), '<p>Hi</p>');
+  assert.ok(cleanContent('<p><img src="/uploads/a.png"></p>').includes('<img'));
+});

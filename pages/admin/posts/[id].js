@@ -1,8 +1,9 @@
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import styles from '../../../styles/admin.module.css';
 import AdminBar from '../../../components/AdminBar';
+import RichEditor from '../../../components/RichEditor';
 import { adminOnly } from '../../../lib/adminSSR';
 import { getById, CATEGORIES } from '../../../lib/posts';
 import { api } from '../../../lib/clientApi';
@@ -20,17 +21,11 @@ const toLocalInput = (iso) => {
   return new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
 };
 
-const TOOLS = [
-  ['H2', '<h2>', '</h2>'], ['H3', '<h3>', '</h3>'], ['Paragraph', '<p>', '</p>'],
-  ['Bold', '<strong>', '</strong>'], ['Italic', '<em>', '</em>'],
-  ['Bullet list', '<ul>\n  <li>', '</li>\n</ul>'], ['Numbered list', '<ol>\n  <li>', '</li>\n</ol>'],
-  ['Quote', '<blockquote>', '</blockquote>'],
-];
+const hasContent = (html) => /<img\b/i.test(html) || html.replace(/<[^>]*>/g, '').replace(/&nbsp;/g, ' ').trim().length > 0;
 
 export default function PostEditor({ post, categories }) {
   const router = useRouter();
   const isNew = !post;
-  const area = useRef(null);
   const [form, setForm] = useState({
     title: post?.title || '',
     slug: post?.slug || '',
@@ -44,38 +39,28 @@ export default function PostEditor({ post, categories }) {
   });
   const [msg, setMsg] = useState(null);
   const [busy, setBusy] = useState(false);
-  const [showPreview, setShowPreview] = useState(false);
 
   const set = (key) => (e) => setForm((f) => ({ ...f, [key]: e.target.value }));
 
-  function wrap(open, close) {
-    const el = area.current;
-    const { selectionStart: a, selectionEnd: b } = el;
-    const next = form.content.slice(0, a) + open + form.content.slice(a, b) + close + form.content.slice(b);
-    setForm((f) => ({ ...f, content: next }));
-    requestAnimationFrame(() => { el.focus(); el.setSelectionRange(a + open.length, b + open.length); });
-  }
-
-  function addLink() {
-    const url = window.prompt('Link URL (https://… or /free_trial)');
-    if (url) wrap(`<a href="${url}">`, '</a>');
-  }
-
-  async function upload(file, intoContent) {
-    if (!file) return;
-    if (file.size > 5 * 1024 * 1024) return setMsg({ type: 'err', text: 'Image is larger than 5 MB' });
+  // Uploads a picture and returns its address (or null after showing the error)
+  async function uploadFile(file) {
+    if (!file) return null;
+    if (file.size > 5 * 1024 * 1024) { setMsg({ type: 'err', text: 'Image is larger than 5 MB' }); return null; }
     setMsg({ type: 'ok', text: 'Uploading image…' });
     const r = await api('/api/admin/upload', { method: 'POST', raw: file });
-    if (!r.ok) return setMsg({ type: 'err', text: r.error });
+    if (!r.ok) { setMsg({ type: 'err', text: r.error }); return null; }
     setMsg({ type: 'ok', text: 'Image uploaded.' });
-    if (intoContent) wrap(`<img src="${r.data.url}" alt="" />`, '');
-    else setForm((f) => ({ ...f, image: r.data.url }));
-    return undefined;
+    return r.data.url;
+  }
+
+  async function uploadFeatured(file) {
+    const url = await uploadFile(file);
+    if (url) setForm((f) => ({ ...f, image: url }));
   }
 
   async function save(statusOverride) {
-    if (!form.title.trim()) return setMsg({ type: 'err', text: 'Title is required' });
-    if (!form.content.trim()) return setMsg({ type: 'err', text: 'Post content is required' });
+    if (!form.title.trim()) return setMsg({ type: 'err', text: 'Please write a title first' });
+    if (!hasContent(form.content)) return setMsg({ type: 'err', text: 'The post is empty. Write something in the big box first' });
     const when = new Date(form.publishedAt);
     if (Number.isNaN(when.getTime())) return setMsg({ type: 'err', text: 'Choose a valid publish date' });
 
@@ -88,7 +73,7 @@ export default function PostEditor({ post, categories }) {
     setBusy(false);
     if (!r.ok) return setMsg({ type: 'err', text: r.error });
     if (isNew) return router.replace(`/admin/posts/${r.data.post.id}`);
-    setForm((f) => ({ ...f, slug: r.data.post.slug, status: r.data.post.status }));
+    setForm((f) => ({ ...f, slug: r.data.post.slug, excerpt: r.data.post.excerpt, status: r.data.post.status }));
     return setMsg({ type: 'ok', text: 'Saved.' });
   }
 
@@ -112,28 +97,21 @@ export default function PostEditor({ post, categories }) {
               <span className={styles.label}>Title</span>
               <input className={styles.input} value={form.title} onChange={set('title')} maxLength={255} placeholder="e.g. Best IPTV Subscription in 2026" />
             </label>
-            <label className={styles.field}>
-              <span className={styles.label}>Short summary (shown on the blog list and in Google)</span>
-              <textarea className={styles.input} rows={3} value={form.excerpt} onChange={set('excerpt')} maxLength={600} />
-              <span className={styles.hint}>{form.excerpt.length}/600 · aim for 140–160 characters</span>
-            </label>
             <div className={styles.field}>
-              <span className={styles.label}>Content (HTML)</span>
-              <div className={styles.toolbar}>
-                {TOOLS.map(([name, open, close]) => (
-                  <button key={name} type="button" className={styles.tool} onClick={() => wrap(open, close)}>{name}</button>
-                ))}
-                <button type="button" className={styles.tool} onClick={addLink}>Link</button>
-                <label className={styles.tool} style={{ cursor: 'pointer' }}>
-                  Insert image
-                  <input type="file" accept="image/*" hidden onChange={(e) => { upload(e.target.files[0], true); e.target.value = ''; }} />
-                </label>
-                <button type="button" className={styles.tool} onClick={() => setShowPreview((v) => !v)}>{showPreview ? 'Hide preview' : 'Preview'}</button>
-              </div>
-              <textarea ref={area} className={styles.textarea} value={form.content} onChange={set('content')} placeholder="<p>Write your post here…</p>" />
-              {showPreview && <div className={styles.preview} dangerouslySetInnerHTML={{ __html: form.content }} />}
-              <span className={styles.hint}>Select text, then click a button to wrap it. Scripts and unsafe code are removed automatically when you save.</span>
+              <span className={styles.label}>Write your post</span>
+              <RichEditor
+                value={form.content}
+                onChange={(html) => setForm((f) => ({ ...f, content: html }))}
+                onUploadImage={uploadFile}
+                onError={(text) => setMsg({ type: 'err', text })}
+              />
+              <span className={styles.hint}>Type like in Word. Select a line and use the buttons for headings, bold, lists, links and pictures. You can also paste text from Word or Google Docs.</span>
             </div>
+            <label className={styles.field}>
+              <span className={styles.label}>Short summary (shown on the blog list and in Google) — optional</span>
+              <textarea className={styles.input} rows={3} value={form.excerpt} onChange={set('excerpt')} maxLength={600} placeholder="Leave empty and we will use the first lines of your post" />
+              <span className={styles.hint}>{form.excerpt.length}/600 · best length is 140–160 characters</span>
+            </label>
           </div>
 
           <aside className={styles.panel}>
@@ -153,16 +131,16 @@ export default function PostEditor({ post, categories }) {
               <span className={styles.hint}>A future date schedules the post — it goes live automatically.</span>
             </label>
             <label className={styles.field}>
-              <span className={styles.label}>URL slug</span>
-              <input className={styles.input} value={form.slug} onChange={set('slug')} placeholder="auto from title" />
+              <span className={styles.label}>Web address (URL slug) — optional</span>
+              <input className={styles.input} value={form.slug} onChange={set('slug')} placeholder="made from the title automatically" />
             </label>
             <div className={styles.field}>
-              <span className={styles.label}>Featured image</span>
+              <span className={styles.label}>Main picture</span>
               {form.image && <img className={styles.thumb} src={form.image} alt="" />}
               <input className={styles.input} value={form.image} onChange={set('image')} placeholder="https://… or upload below" />
               <label className={`${styles.btn} ${styles.btnGhost} ${styles.small}`} style={{ justifyContent: 'center' }}>
-                Upload image (max 5 MB)
-                <input type="file" accept="image/*" hidden onChange={(e) => { upload(e.target.files[0], false); e.target.value = ''; }} />
+                Upload picture (max 5 MB)
+                <input type="file" accept="image/*" hidden onChange={(e) => { uploadFeatured(e.target.files[0]); e.target.value = ''; }} />
               </label>
             </div>
             <label className={styles.field}>

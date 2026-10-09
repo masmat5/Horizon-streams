@@ -35,3 +35,18 @@ test('accepts uploaded and https images, unknown category falls back', () => {
   assert.equal(cleanInput({ ...ok, category: 'Hacked' }).category, 'News');
   assert.equal(cleanInput({ ...ok, status: 'draft' }).status, 'draft');
 });
+
+test('empty rich-text editor output is rejected, text-less image posts are allowed', () => {
+  assert.throws(() => cleanInput({ title: 'T', content: '<p></p>' }), ValidationError);
+  assert.throws(() => cleanInput({ title: 'T', content: '<p>&nbsp;</p><p> </p>' }), ValidationError);
+  assert.ok(cleanInput({ title: 'T', content: '<p><img src="/uploads/a.png" alt=""></p>' }));
+});
+
+test('summary is generated from the post when left empty', () => {
+  const long = '<p>' + 'word '.repeat(80) + '</p>';
+  const p = cleanInput({ title: 'T', content: long });
+  assert.ok(p.excerpt.length > 100 && p.excerpt.length <= 160, p.excerpt.length);
+  assert.ok(p.excerpt.endsWith('…'));
+  assert.equal(cleanInput({ title: 'T', content: '<p>Short post</p>' }).excerpt, 'Short post');
+  assert.equal(cleanInput({ title: 'T', content: '<p>x</p>', excerpt: 'Mine' }).excerpt, 'Mine');
+});
