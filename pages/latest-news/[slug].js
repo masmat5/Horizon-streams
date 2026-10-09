@@ -3,31 +3,19 @@ import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
 import FloatingWA from '../../components/FloatingWA';
 import SEOHead, { SITE_URL } from '../../components/SEOHead';
-import { posts } from './index';
+import { getPublishedBySlug, listPublished } from '../../lib/posts';
+import { CATEGORIES as catColor, formatDate, monthLabel } from '../../lib/blogConfig';
 
-const fullContent = {
-  'best-iptv-subscription-2026': `<p>If you are searching for the <strong>best IPTV subscription</strong>, the choice can feel overwhelming. Hundreds of providers promise thousands of channels, but not all of them deliver stable, buffer-free streaming. Here is a practical checklist to find the best IPTV service for your needs in 2026.</p><h3>1. Server Stability and Uptime</h3><p>A good IPTV subscription runs on load-balanced servers with strong uptime. HorizonStream IPTV offers 21 premium servers such as StarShare, Opplex, B1G, Dream8K and Trex, so you can switch if one is busy.</p><h3>2. Picture Quality: HD, 4K and 8K</h3><p>Look for providers that offer real 4K IPTV servers with high bitrate, not just a label. Our B1G, Strong4K and Smart4K servers are built for 4K streaming.</p><h3>3. Free IPTV Trial</h3><p>The best IPTV providers let you test before paying. Request a free IPTV trial on WhatsApp and check channel switching speed, EPG and VOD yourself.</p><h3>4. Device Support</h3><p>Make sure the IPTV works on Firestick, Android TV, Smart TV (Samsung, LG), iPhone, iPad, Windows, Mac, MAG box and Enigma2. HorizonStream IPTV supports all of them via M3U or Xtream Codes.</p><h3>5. Fair Price</h3><p>Our plans start from just £10 per month, £25 for 3 months, £45 for 6 months and £80 for 1 year, with every plan including access to all premium servers.</p><h3>6. Real Support</h3><p>Choose a provider with 24/7 support. We answer on WhatsApp within minutes.</p><p>Ready to try? <a href="/free_trial">Start your free IPTV trial</a> or <a href="/#plans">view IPTV subscription plans</a>.</p>`,
-  'how-to-setup-iptv-firestick': `<p>Want to watch IPTV on your Amazon Firestick or Fire TV? Setup takes about 5 minutes. Follow this step-by-step guide.</p><h3>Step 1: Prepare Your Firestick</h3><p>Go to Settings, My Fire TV, Developer Options and enable "Install unknown apps" for the Downloader app. Install Downloader from the Amazon App Store.</p><h3>Step 2: Install an IPTV Player</h3><p>The two most popular IPTV players for Firestick are <strong>IPTV Smarters Pro</strong> and <strong>TiviMate</strong>. Install the player using its official download link or code from the developer website.</p><h3>Step 3: Get Your IPTV Subscription Details</h3><p>Message us on WhatsApp and choose a plan or a free IPTV trial. We send your Xtream Codes login (server URL, username, password) or an M3U link.</p><h3>Step 4: Add the Login in the App</h3><p>Open the player, choose "Login with Xtream Codes API" (or add M3U URL), enter your details and press Add User. Your live channels, movies and series load in seconds.</p><h3>Step 5: Tips for Smooth Streaming</h3><p>Use a 5 GHz Wi-Fi or Ethernet adapter, keep at least 25 Mbps for 4K, and restart the Firestick weekly. If you see buffering, ask us to move you to a different server.</p><p>Need help? Contact HorizonStream IPTV on WhatsApp and we will set it up with you.</p>`,
-  'iptv-smarters-pro-vs-tivimate': `<p>IPTV Smarters Pro and TiviMate are the two best-known IPTV players. Which one is right for you?</p><h3>IPTV Smarters Pro</h3><p>Free to use, works on Android, iOS, Firestick, Samsung and LG Smart TVs and Windows. It supports Xtream Codes and M3U, with live TV, movies, series and catch-up. It is the easiest choice for beginners.</p><h3>TiviMate</h3><p>Built for Android TV and Firestick, TiviMate offers a clean EPG grid, multiple playlists, favourites groups and recording in the premium version. It is the favourite of power users.</p><h3>Which Is Best?</h3><p>Choose <strong>IPTV Smarters Pro</strong> if you use iPhone, Smart TV or want a free app. Choose <strong>TiviMate</strong> if you mainly watch on Firestick or Android TV and want the best channel guide.</p><p>Both work perfectly with every HorizonStream IPTV subscription. <a href="/free_trial">Get a free trial</a> and test both.</p>`,
-  'free-iptv-trial-what-to-test': `<p>A <strong>free IPTV trial</strong> is the best way to judge an IPTV provider without risk. Test these 7 things before you pay:</p><h3>1. Channel Switching Speed</h3><p>Zap between channels. A good server changes channels in 1-2 seconds.</p><h3>2. Buffering at Peak Time</h3><p>Test in the evening, when the most people are watching, especially on live sports.</p><h3>3. 4K and HD Quality</h3><p>Open a 4K channel and check for sharpness and smooth motion.</p><h3>4. EPG (TV Guide)</h3><p>Check that the programme guide loads correctly and matches the channel.</p><h3>5. Movies and Series (VOD)</h3><p>Play a few titles and make sure they start fast and do not stop.</p><h3>6. Your Devices</h3><p>Try it on your own Firestick, Smart TV or phone.</p><h3>7. Support Response</h3><p>Send a question on WhatsApp and see how fast the team replies.</p><p>HorizonStream IPTV offers a free trial on WhatsApp with fast activation. <a href="/free_trial">Start your free trial now</a>.</p>`,
-  'best-iptv-apps-2025': `<p>Choosing the right IPTV player app can make or break your streaming experience. We tested over a dozen apps and narrowed it down to the top 5 that work best with your HorizonStream IPTV subscription.</p><h3>1. TiviMate (Android / Fire Stick)</h3><p>TiviMate is our top recommendation for Android users. It has a clean interface, supports multiple playlists, Electronic Program Guide (EPG), and catch-up TV. The premium version is worth every rupee.</p><h3>2. IPTV Smarters Pro</h3><p>Available on Android, iOS, and Smart TVs, IPTV Smarters Pro supports M3U playlists and Xtream Codes. It is easy to set up and works great with all HorizonStream IPTV servers.</p><h3>3. GSE Smart IPTV (iOS)</h3><p>The best option for iPhone and iPad users. GSE Smart IPTV supports M3U, JSON, and Xtream Codes APIs. It also has parental controls and a built-in EPG viewer.</p><h3>4. VLC Media Player</h3><p>VLC is a free and open-source option available on all platforms. While it lacks advanced features like EPG, it is reliable and supports almost every stream format.</p><h3>5. Smart IPTV (Samsung and LG Smart TVs)</h3><p>If you have a Samsung or LG Smart TV, Smart IPTV is the go-to app. Simply load your M3U link and you are ready to stream directly on your big screen.</p><p>Contact us on WhatsApp and we will help you set up any of these apps with your HorizonStream IPTV subscription in minutes.</p>`,
-  'opplex-new-channels-added': `<p>We are thrilled to announce a major update to the Opplex server. Over 500 new channels have been added this month, bringing our total Opplex channel count to over 3,000.</p><h3>What Is New?</h3><p>The new additions include premium sports channels covering international football, cricket leagues, and Formula 1. We have also added more regional Pakistani and Indian channels, plus a wide range of kids entertainment.</p><h3>Improved VOD Library</h3><p>The Opplex VOD library has also been refreshed with hundreds of new Bollywood, Hollywood, and Turkish drama titles. All content is available in HD quality.</p><p>Existing subscribers will see the new channels automatically in their channel list. If you have not subscribed yet, contact us on WhatsApp to get started.</p>`,
-  'how-to-setup-iptv-smart-tv': `<p>Setting up IPTV on your Smart TV is straightforward. Follow these steps to start watching HorizonStream IPTV on your big screen today.</p><h3>Step 1: Install an IPTV App</h3><p>Go to your TV's app store and search for "Smart IPTV" (Samsung/LG) or "IPTV Smarters" (Android TV). Install the app.</p><h3>Step 2: Contact Us on WhatsApp</h3><p>Send us a message on WhatsApp at +92 316 7029185. Tell us which server you want and which plan you are interested in.</p><h3>Step 3: Receive Your Credentials</h3><p>Once you subscribe, we will send you your M3U link or Xtream Codes login details via WhatsApp within minutes.</p><h3>Step 4: Enter Your Details in the App</h3><p>Open the IPTV app on your Smart TV and enter the credentials we sent you. Your channels will load automatically.</p><h3>Step 5: Enjoy!</h3><p>That is it — you are now ready to watch thousands of channels in HD and 4K quality on your Smart TV.</p>`,
-  'starshare-4k-sports-update': `<p>Big news for sports fans! The StarShare server has been upgraded to support 4K Ultra HD streaming for major sports channels.</p><h3>Which Sports Are Available in 4K?</h3><p>You can now watch international football matches, PSL cricket, NBA basketball, and UFC events in stunning 4K quality — all through the StarShare server.</p><h3>What Do I Need?</h3><p>To enjoy 4K streams you will need a 4K-capable device and a stable internet connection of at least 25 Mbps. A fibre or fast 4G/5G connection is recommended.</p><p>All existing StarShare subscribers have automatic access to the new 4K channels. Contact us on WhatsApp if you have any questions about your subscription.</p>`,
-  'b1g-server-uptime-record': `<p>We are proud to share that our B1G 4K server maintained a 99.9% uptime record throughout Q1 2025. This is a testament to our ongoing investment in premium server infrastructure.</p><h3>What Does 99.9% Uptime Mean?</h3><p>It means the server was available and streaming for 99.9% of the time — less than 9 hours of downtime across the entire year. Most standard IPTV providers average around 95-97% uptime.</p><h3>Our Commitment</h3><p>We continuously monitor all our servers 24 hours a day. Our technical team responds to any issues within minutes to ensure your streaming is never interrupted for long.</p><p>Thank you to all our subscribers for your continued trust. If you are not yet subscribed to B1G, contact us on WhatsApp to add it to your plan.</p>`,
-};
-
-export async function getStaticPaths() {
-  return { paths: posts.map((p) => ({ params: { slug: p.slug } })), fallback: false };
-}
-export async function getStaticProps({ params }) {
-  const post = posts.find((p) => p.slug === params.slug) || null;
-  return { props: { post } };
+export async function getServerSideProps({ params, res }) {
+  const post = await getPublishedBySlug(params.slug);
+  if (!post) return { notFound: true };
+  const recent = (await listPublished({ limit: 6 })).filter((p) => p.id !== post.id).slice(0, 4);
+  res.setHeader('Cache-Control', 'public, s-maxage=60, stale-while-revalidate=300');
+  return { props: { post, recent } };
 }
 
-export default function PostPage({ post }) {
-  if (!post) return null;
-  const catColor = { 'Streaming Tips': '#7c3aed', 'Server Update': '#06b6d4', 'How To': '#f59e0b', 'News': '#4ade80' };
+export default function PostPage({ post, recent }) {
+  const archives = [...new Set([post, ...recent].map((p) => monthLabel(p.publishedAt)))];
   const postUrl = `${SITE_URL}/latest-news/${post.slug}`;
 
   const breadcrumbSchema = {
@@ -45,9 +33,9 @@ export default function PostPage({ post }) {
     '@type': 'BlogPosting',
     headline: post.title,
     description: post.excerpt,
-    image: post.image,
-    datePublished: post.date,
-    dateModified: post.date,
+    image: post.image || undefined,
+    datePublished: post.publishedAt,
+    dateModified: post.updatedAt,
     author: { '@type': 'Organization', name: post.author, url: SITE_URL },
     publisher: {
       '@type': 'Organization',
@@ -65,7 +53,7 @@ export default function PostPage({ post }) {
         description={post.excerpt}
         keywords={`${post.category}, IPTV blog, HorizonStream IPTV, ${post.title.toLowerCase()}`}
         canonical={postUrl}
-        ogImage={post.image}
+        ogImage={post.image ? (post.image.startsWith('/') ? `${SITE_URL}${post.image}` : post.image) : undefined}
         ogType="article"
         structuredData={[breadcrumbSchema, articleSchema]}
       />
@@ -88,14 +76,14 @@ export default function PostPage({ post }) {
           <h1>{post.title}</h1>
           <div className="post-meta">
             <span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>{post.author}</span>
-            <span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/></svg>{post.date}</span>
+            <span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/></svg>{formatDate(post.publishedAt)}</span>
           </div>
         </div>
       </div>
 
       <div className="post-layout">
         <article className="post-content">
-          <div className="post-body" dangerouslySetInnerHTML={{ __html: fullContent[post.slug] || `<p>${post.excerpt}</p>` }} />
+          <div className="post-body" dangerouslySetInnerHTML={{ __html: post.content }} />
           <div className="back-link"><Link href="/latest-news">← Back to Latest News</Link></div>
         </article>
         <aside className="sidebar">
@@ -108,13 +96,13 @@ export default function PostPage({ post }) {
           <div className="widget">
             <h3 className="widget-title">Recent Posts</h3>
             <ul className="recent-list">
-              {posts.slice(0, 4).map((p) => (<li key={p.id}><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg><Link href={`/latest-news/${p.slug}`}>{p.title}</Link></li>))}
+              {recent.map((p) => (<li key={p.id}><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg><Link href={`/latest-news/${p.slug}`}>{p.title}</Link></li>))}
             </ul>
           </div>
           <div className="widget">
             <h3 className="widget-title">Archives</h3>
             <ul className="recent-list">
-              {['May 2025', 'April 2025', 'March 2025', 'February 2025'].map((m) => (<li key={m}><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg><span>{m}</span></li>))}
+              {archives.map((m) => (<li key={m}><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg><span>{m}</span></li>))}
             </ul>
           </div>
         </aside>
@@ -140,6 +128,13 @@ export default function PostPage({ post }) {
         .post-content { background:var(--bg-card);border:1px solid var(--border);border-radius:14px;padding:2rem; }
         .post-body :global(p) { font-size:15px;color:var(--text-secondary);line-height:1.9;font-weight:300;margin-bottom:1.25rem; }
         .post-body :global(h3) { font-size:18px;font-weight:700;color:#fff;margin:1.75rem 0 0.75rem;padding-left:12px;border-left:3px solid var(--accent); }
+        .post-body :global(h2) { font-size:22px;font-weight:700;color:#fff;margin:2rem 0 0.85rem; }
+        .post-body :global(h4) { font-size:16px;font-weight:700;color:#fff;margin:1.25rem 0 0.5rem; }
+        .post-body :global(ul), .post-body :global(ol) { margin:0 0 1.25rem 1.4rem;color:var(--text-secondary);line-height:1.9;font-size:15px;font-weight:300; }
+        .post-body :global(a) { color:var(--accent-2);text-decoration:underline; }
+        .post-body :global(strong) { color:#fff;font-weight:600; }
+        .post-body :global(blockquote) { margin:0 0 1.25rem;padding:0.5rem 1rem;border-left:3px solid var(--accent-2);color:var(--text-secondary);font-style:italic; }
+        .post-body :global(img) { max-width:100%;height:auto;border-radius:10px;margin:0.5rem 0 1.25rem; }
         .back-link { margin-top:2rem;padding-top:1.5rem;border-top:1px solid var(--border); }
         .back-link a { font-size:14px;color:var(--accent-2);font-weight:500;transition:opacity 0.2s; }
         .back-link a:hover { opacity:0.75; }

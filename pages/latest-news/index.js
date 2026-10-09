@@ -3,20 +3,8 @@ import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
 import FloatingWA from '../../components/FloatingWA';
 import SEOHead, { SITE_URL } from '../../components/SEOHead';
-
-export const posts = [
-  { id: 6, slug: 'best-iptv-subscription-2026', category: 'Streaming Tips', title: 'Best IPTV Subscription in 2026: How to Choose the Right IPTV Service', date: 'October 8, 2026', author: 'HorizonStream IPTV Team', excerpt: 'Searching for the best IPTV subscription? Learn what to check before you buy: server stability, 4K quality, free trial, device support, price and support.', image: 'https://images.unsplash.com/photo-1593784991095-a205069470b6?w=800&q=70' },
-  { id: 7, slug: 'how-to-setup-iptv-firestick', category: 'How To', title: 'How to Set Up IPTV on Amazon Firestick (Step by Step, 2026)', date: 'October 6, 2026', author: 'HorizonStream IPTV Team', excerpt: 'Complete guide to install IPTV on Firestick and Fire TV with IPTV Smarters Pro or TiviMate. Takes under 5 minutes.', image: 'https://images.unsplash.com/photo-1522869635100-9f4c5e86aa37?w=800&q=70' },
-  { id: 8, slug: 'iptv-smarters-pro-vs-tivimate', category: 'Streaming Tips', title: 'IPTV Smarters Pro vs TiviMate: Which IPTV Player Is Best?', date: 'October 3, 2026', author: 'HorizonStream IPTV Team', excerpt: 'IPTV Smarters Pro or TiviMate? We compare setup, EPG, multi-playlist, devices and price so you can pick the best IPTV player.', image: 'https://images.unsplash.com/photo-1461151304267-38535e780c79?w=800&q=70' },
-  { id: 9, slug: 'free-iptv-trial-what-to-test', category: 'How To', title: 'Free IPTV Trial: 7 Things to Test Before You Buy an IPTV Subscription', date: 'September 30, 2026', author: 'HorizonStream IPTV Team', excerpt: 'A free IPTV trial is the safest way to choose a provider. Use this checklist to test buffering, 4K channels, EPG, VOD and support.', image: 'https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?w=800&q=70' },
-  { id: 1, slug: 'best-iptv-apps-2025', category: 'Streaming Tips', title: 'Best IPTV Apps 2026: Top 5 IPTV Players for Firestick, Android & Smart TV', date: 'May 18, 2025', author: 'HorizonStream IPTV Team', excerpt: 'Looking for the best app to stream your HorizonStream IPTV subscription? We tested dozens of players and picked the top 5 that work flawlessly on Android, iOS, and Smart TV.', image: 'https://images.unsplash.com/photo-1593784991095-a205069470b6?w=800&q=70' },
-  { id: 2, slug: 'opplex-new-channels-added', category: 'Server Update', title: 'Opplex Server — 500+ New Channels Added This Month', date: 'May 10, 2025', author: 'HorizonStream IPTV Team', excerpt: 'We are excited to announce that the Opplex server has been updated with over 500 new channels including premium sports, international news, and regional content from South Asia.', image: 'https://images.unsplash.com/photo-1522869635100-9f4c5e86aa37?w=800&q=70' },
-  { id: 3, slug: 'how-to-setup-iptv-smart-tv', category: 'How To', title: 'How to Set Up IPTV on Your Smart TV — Step by Step', date: 'April 28, 2025', author: 'HorizonStream IPTV Team', excerpt: 'Setting up IPTV on a Smart TV is easier than you think. In this guide we walk you through every step — from installing the right app to entering your HorizonStream IPTV credentials.', image: 'https://images.unsplash.com/photo-1461151304267-38535e780c79?w=800&q=70' },
-  { id: 4, slug: 'starshare-4k-sports-update', category: 'Server Update', title: 'StarShare Now Streaming 4K Sports Channels', date: 'April 15, 2025', author: 'HorizonStream IPTV Team', excerpt: 'The StarShare server has been upgraded with 4K sports streaming for major leagues. Enjoy crystal-clear football, cricket, and basketball without any buffering.', image: 'https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=800&q=70' },
-  { id: 5, slug: 'b1g-server-uptime-record', category: 'News', title: 'B1G Server Achieves 99.9% Uptime Record in 2025', date: 'March 30, 2025', author: 'HorizonStream IPTV Team', excerpt: 'Our B1G 4K server maintained a 99.9% uptime throughout the first quarter of 2025. We continue to invest in infrastructure to ensure the best possible streaming experience.', image: 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=800&q=70' },
-];
-
-const catColor = { 'Streaming Tips': '#7c3aed', 'Server Update': '#06b6d4', 'How To': '#f59e0b', 'News': '#4ade80' };
+import { listPublished } from '../../lib/posts';
+import { CATEGORIES as catColor, formatDate, monthLabel } from '../../lib/blogConfig';
 
 const breadcrumbSchema = {
   '@context': 'https://schema.org',
@@ -27,7 +15,7 @@ const breadcrumbSchema = {
   ],
 };
 
-const blogSchema = {
+const makeBlogSchema = (posts) => ({
   '@context': 'https://schema.org',
   '@type': 'Blog',
   name: 'HorizonStream IPTV — Latest News',
@@ -37,13 +25,21 @@ const blogSchema = {
     '@type': 'BlogPosting',
     headline: p.title,
     url: `${SITE_URL}/latest-news/${p.slug}`,
-    datePublished: p.date,
+    datePublished: p.publishedAt,
     author: { '@type': 'Organization', name: p.author },
-    image: p.image,
+    image: p.image || undefined,
   })),
-};
+});
 
-export default function LatestNews() {
+export async function getServerSideProps({ query, res }) {
+  const search = typeof query.s === 'string' ? query.s.trim().slice(0, 80) : '';
+  const posts = await listPublished({ search });
+  res.setHeader('Cache-Control', 'public, s-maxage=60, stale-while-revalidate=300');
+  return { props: { posts, search } };
+}
+
+export default function LatestNews({ posts, search }) {
+  const archives = [...new Set(posts.map((p) => monthLabel(p.publishedAt)))].slice(0, 8);
   return (
     <>
       <SEOHead
@@ -51,7 +47,8 @@ export default function LatestNews() {
         description="IPTV streaming tips, server updates, and step-by-step setup guides from the HorizonStream IPTV team. Stay up to date on StarShare, Opplex, and B1G server news."
         keywords="best IPTV, best IPTV apps, IPTV Smarters Pro setup, TiviMate setup, how to setup IPTV on Firestick, IPTV on Smart TV, IPTV buying guide, IPTV news, IPTV streaming tips, StarShare updates, Opplex updates, B1G server news"
         canonical={`${SITE_URL}/latest-news`}
-        structuredData={[breadcrumbSchema, blogSchema]}
+        noindex={!!search}
+        structuredData={[breadcrumbSchema, makeBlogSchema(posts)]}
       />
       <Navbar />
 
@@ -69,6 +66,9 @@ export default function LatestNews() {
       <div className="news-layout">
         {/* Posts */}
         <main className="posts-col">
+          {posts.length === 0 && (
+            <p className="post-excerpt">{search ? `No posts found for "${search}".` : 'New posts are coming soon.'}</p>
+          )}
           {posts.map((post) => (
             <article key={post.id} className="post-card">
               {post.image && (
@@ -81,7 +81,7 @@ export default function LatestNews() {
                 <h2 className="post-title"><Link href={`/latest-news/${post.slug}`}>{post.title}</Link></h2>
                 <div className="post-meta">
                   <span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>{post.author}</span>
-                  <span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/></svg>{post.date}</span>
+                  <span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/></svg>{formatDate(post.publishedAt)}</span>
                 </div>
                 <p className="post-excerpt">{post.excerpt}</p>
                 <Link href={`/latest-news/${post.slug}`} className="read-more">Continue Reading →</Link>
@@ -93,10 +93,10 @@ export default function LatestNews() {
         {/* Sidebar */}
         <aside className="sidebar">
           <div className="widget">
-            <div className="search-box">
-              <input type="text" placeholder="Search..." className="search-input" />
+            <form className="search-box" action="/latest-news" method="get">
+              <input type="text" name="s" defaultValue={search} placeholder="Search..." className="search-input" aria-label="Search posts" />
               <button className="search-btn" aria-label="Search"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></button>
-            </div>
+            </form>
           </div>
           <div className="widget">
             <h3 className="widget-title">Recent Posts</h3>
@@ -117,7 +117,7 @@ export default function LatestNews() {
           <div className="widget">
             <h3 className="widget-title">Archives</h3>
             <ul className="recent-list">
-              {['May 2025', 'April 2025', 'March 2025', 'February 2025'].map((m) => (
+              {archives.map((m) => (
                 <li key={m}><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg><span>{m}</span></li>
               ))}
             </ul>
