@@ -116,24 +116,41 @@ export default function FloatingWA() {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
-    const FIRST_DELAY = 60 * 1000;      // first popup 1 minute after the page opens
-    const EVERY = 15 * 60 * 1000;       // then once every 15 minutes
+    const FIRST_DELAY = 3 * 1000;       // a new visitor sees the first popup 3 seconds after landing
+    const GAP = 15 * 60 * 1000;         // after that, never more often than once per 15 minutes
     const VISIBLE_FOR = 8 * 1000;       // each popup stays on screen for 8 seconds
+    const KEY = 'hs_proof_last';        // when the last popup was shown (survives page changes and reloads)
+    let showTimer;
     let hideTimer;
+
+    const readLast = () => {
+      try { return Number(window.localStorage.getItem(KEY)) || 0; } catch { return 0; }
+    };
+    const writeLast = (t) => {
+      try { window.localStorage.setItem(KEY, String(t)); } catch { /* private mode: fall back to per-page timing */ }
+    };
 
     const popup = () => {
       showRandomNotification();
+      writeLast(Date.now());
       clearTimeout(hideTimer);
       hideTimer = setTimeout(() => setIsVisible(false), VISIBLE_FOR);
+      schedule(GAP);
     };
 
-    const first = setTimeout(popup, FIRST_DELAY);
-    const interval = setInterval(popup, EVERY);
+    // wait until 15 minutes have passed since the last popup (closing it early does not reset the clock)
+    const schedule = (delay) => {
+      clearTimeout(showTimer);
+      showTimer = setTimeout(popup, delay);
+    };
+
+    const last = readLast();
+    const waited = Date.now() - last;
+    schedule(last && waited < GAP ? GAP - waited : FIRST_DELAY);
 
     return () => {
-      clearTimeout(first);
+      clearTimeout(showTimer);
       clearTimeout(hideTimer);
-      clearInterval(interval);
     };
   }, []);
 
