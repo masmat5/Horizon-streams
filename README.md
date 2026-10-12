@@ -69,7 +69,7 @@ Hostinger deploys automatically on every push, so the branches are the safety ne
 4. Open a pull request `staging` -> `main`. CI must be green. Merge = live deploy.
 5. In GitHub: Settings -> Branches -> protect `main` (require pull request + the `test-and-build` check, no direct pushes).
 
-**Version lock:** `package-lock.json` is committed and installs use `npm ci`; dependency versions in `package.json` are exact (no `^`), `.npmrc` keeps it that way; Node is pinned in `.nvmrc` / `engines` (20+). Upgrade dependencies deliberately, in their own pull request.
+**Version lock:** `package-lock.json` is committed and installs use `npm ci`; dependency versions in `package.json` are exact (no `^`), `.npmrc` keeps it that way; Node is pinned in `.nvmrc` / `engines` (22.12+). Upgrade dependencies deliberately, in their own pull request.
 
 Run the tests locally:
 ```bash

@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
-import Link from '@tiptap/extension-link';
 import Image from '@tiptap/extension-image';
 import styles from '../styles/admin.module.css';
 
@@ -12,9 +11,13 @@ export default function RichEditor({ value, onChange, onUploadImage, onError }) 
 
   const editor = useEditor({
     immediatelyRender: false, // Next.js renders on the server first
+    shouldRerenderOnTransaction: true, // keep the toolbar buttons (bold, list...) in sync with the cursor
     extensions: [
-      StarterKit.configure({ heading: { levels: [2, 3] } }),
-      Link.configure({ openOnClick: false, autolink: true, HTMLAttributes: { rel: 'noopener noreferrer' } }),
+      // Tiptap 3 ships Link inside StarterKit
+      StarterKit.configure({
+        heading: { levels: [2, 3] },
+        link: { openOnClick: false, autolink: true, HTMLAttributes: { rel: 'noopener noreferrer' } },
+      }),
       Image,
     ],
     content: value || '',

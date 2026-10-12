@@ -116,21 +116,23 @@ export default function FloatingWA() {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
-    // Initial delay before showing the first floating notification (4 seconds)
-    const initialTimeout = setTimeout(() => {
-      showRandomNotification();
-    }, 4000);
+    const FIRST_DELAY = 60 * 1000;      // first popup 1 minute after the page opens
+    const EVERY = 15 * 60 * 1000;       // then once every 15 minutes
+    const VISIBLE_FOR = 8 * 1000;       // each popup stays on screen for 8 seconds
+    let hideTimer;
 
-    const interval = setInterval(() => {
-      // Hide active toast, switch content, then animate back up
-      setIsVisible(false);
-      setTimeout(() => {
-        showRandomNotification();
-      }, 400); // sync with fade transition duration
-    }, 12000); // Shows a new social proof popup every 12 seconds
+    const popup = () => {
+      showRandomNotification();
+      clearTimeout(hideTimer);
+      hideTimer = setTimeout(() => setIsVisible(false), VISIBLE_FOR);
+    };
+
+    const first = setTimeout(popup, FIRST_DELAY);
+    const interval = setInterval(popup, EVERY);
 
     return () => {
-      clearTimeout(initialTimeout);
+      clearTimeout(first);
+      clearTimeout(hideTimer);
       clearInterval(interval);
     };
   }, []);

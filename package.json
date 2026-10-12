@@ -8,23 +8,26 @@
     "start": "next start",
     "seed": "node scripts/seed.js",
     "admin:hash": "node scripts/hash-password.js",
-    "test": "node --test tests/",
+    "test": "node --test \"tests/*.test.js\"",
     "backup": "node scripts/backup.js",
     "restore": "node scripts/restore.js"
   },
   "dependencies": {
-    "@tiptap/extension-image": "2.27.3",
-    "@tiptap/extension-link": "2.27.3",
-    "@tiptap/pm": "2.27.3",
-    "@tiptap/react": "2.27.3",
-    "@tiptap/starter-kit": "2.27.3",
+    "@tiptap/core": "3.31.4",
+    "@tiptap/extension-image": "3.31.4",
+    "@tiptap/pm": "3.31.4",
+    "@tiptap/react": "3.31.4",
+    "@tiptap/starter-kit": "3.31.4",
     "mysql2": "3.24.5",
     "next": "15.5.27",
     "react": "18.3.1",
     "react-dom": "18.3.1",
-    "sanitize-html": "2.17.5"
+    "sanitize-html": "2.18.0"
   },
   "engines": {
-    "node": ">=20 <23"
+    "node": ">=22.12 <25"
+  },
+  "overrides": {
+    "postcss": "8.5.23"
   }
 }

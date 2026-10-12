@@ -188,10 +188,10 @@ export default function FreeTrialPage() {
             {/* Updated Action Deck focusing on Premium Packages instead of Free Trial */}
             <div className="action-deck">
               <h3>Get Instant Premium Access</h3>
-              <p>Satisfied with the performance? Order your premium dedicated subscription lineup today and unlock over 21,000+ global channels with absolute stable connections.</p>
+              <p>Satisfied with the performance? Order your premium dedicated subscription lineup today and unlock over 10,000+ global channels with absolute stable connections.</p>
               
               <div className="trial-perks">
-                <div className="perk-item">✓ 21,000+ Premium Live Channels (4K/HD)</div>
+                <div className="perk-item">✓ 10,000+ Premium Live Channels (4K/HD)</div>
                 <div className="perk-item">✓ Huge VOD Library (Latest Movies & Series)</div>
                 <div className="perk-item">✓ Anti-Freeze & No-Buffer Server Technology</div>
                 <div className="perk-item">✓ 24/7 Dedicated WhatsApp Support Setup</div>
