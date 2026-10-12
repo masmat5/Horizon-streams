@@ -41,8 +41,8 @@ export default function Home() {
   return (
     <>
       <SEOHead
-        title="Best IPTV Subscription 2026 | Premium 4K IPTV, Free Trial & Reseller Panel"
-        description="Looking for the best IPTV subscription? HorizonStream IPTV gives you 10,000+ live channels, movies & sports in 4K/8K on Firestick, Smart TV, Android & iPhone. 21 premium servers, free IPTV trial, from £10/month. Instant activation on WhatsApp."
+        title="Best IPTV Subscription 2026 | 4K IPTV & Free Trial"
+        description="Best IPTV subscription with 10,000+ live channels, movies & sports in 4K on Firestick, Smart TV & Android. 21 servers, free trial, from £10/month."
         keywords="best IPTV, best IPTV subscription, best IPTV service 2026, IPTV subscription, buy IPTV, premium IPTV, cheap IPTV, IPTV free trial, IPTV 4K, 4K IPTV subscription, IPTV UK, IPTV USA, IPTV Pakistan, IPTV Canada, IPTV Firestick, IPTV Smart TV, IPTV Smarters Pro, TiviMate IPTV, M3U IPTV, Xtream Codes IPTV, IPTV reseller panel, live sports IPTV, cricket IPTV, StarShare IPTV, Opplex IPTV, B1G IPTV, HorizonStream IPTV"
         canonical={SITE_URL}
         structuredData={[serverListSchema, serviceSchema]}

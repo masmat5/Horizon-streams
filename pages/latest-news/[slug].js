@@ -4,11 +4,13 @@ import Footer from '../../components/Footer';
 import FloatingWA from '../../components/FloatingWA';
 import SEOHead, { SITE_URL } from '../../components/SEOHead';
 import { getPublishedBySlug, recentPosts, archiveMonths } from '../../lib/posts';
+import { fillImageAlt } from '../../lib/sanitize';
 import { CATEGORIES as catColor, formatDate, monthLabel } from '../../lib/blogConfig';
 
 export async function getServerSideProps({ params, res }) {
-  const post = await getPublishedBySlug(params.slug);
+  let post = await getPublishedBySlug(params.slug);
   if (!post) return { notFound: true };
+  post = { ...post, content: fillImageAlt(post.content, post.title) }; // older posts saved before alt texts were added
   const [recent, archives] = await Promise.all([recentPosts(4, post.id), archiveMonths()]);
   res.setHeader('Cache-Control', 'public, s-maxage=60, stale-while-revalidate=300');
   return { props: { post, recent, archives } };
@@ -48,7 +50,7 @@ export default function PostPage({ post, recent, archives }) {
   return (
     <>
       <SEOHead
-        title={`${post.title} | HorizonStream IPTV`}
+        title={post.title.length > 42 ? post.title : `${post.title} | HorizonStream IPTV`}
         description={post.excerpt}
         keywords={`${post.category}, IPTV blog, HorizonStream IPTV, ${post.title.toLowerCase()}`}
         canonical={postUrl}

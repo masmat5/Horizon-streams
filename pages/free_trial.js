@@ -130,8 +130,8 @@ export default function FreeTrialPage() {
   return (
     <>
       <SEOHead
-        title="Free IPTV Trial 2026 — Test 4K Live TV, No Credit Card | HorizonStream IPTV"
-        description="Try HorizonStream IPTV free before you subscribe. Watch a live streaming speed benchmark, verify zero-buffer 4K performance, then get instant premium access via WhatsApp."
+        title="Free IPTV Trial 2026 – Test 4K IPTV Before You Buy"
+        description="Try HorizonStream IPTV free before you subscribe. Test zero-buffer 4K live TV on your own device, then get instant access on WhatsApp."
         keywords="free IPTV trial, IPTV free trial 24 hours, IPTV free trial no credit card, free IPTV test, best IPTV free trial 2026, IPTV trial Firestick, IPTV trial Smart TV, 4K IPTV free trial, IPTV speed test, no buffering IPTV, HorizonStream free trial"
         canonical={`${SITE_URL}/free_trial`}
         structuredData={freeTrialSchema}

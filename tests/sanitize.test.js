@@ -28,3 +28,10 @@ test('removes empty paragraphs but keeps picture paragraphs', () => {
   assert.equal(cleanContent('<p>Hi</p><p></p><p> </p>'), '<p>Hi</p>');
   assert.ok(cleanContent('<p><img src="/uploads/a.png"></p>').includes('<img'));
 });
+
+test('pictures without a description get the post title as alt text', () => {
+  const { fillImageAlt } = require('../lib/sanitize');
+  assert.equal(fillImageAlt('<p><img src="/uploads/a.png" alt="" /></p>', 'Best IPTV'), '<p><img alt="Best IPTV" src="/uploads/a.png" /></p>');
+  assert.equal(fillImageAlt('<img src="x.png">', 'A "quoted" <b>'), '<img alt="A &quot;quoted&quot; &lt;b>" src="x.png">');
+  assert.equal(fillImageAlt('<img alt="Mine" src="x.png">', 'T'), '<img alt="Mine" src="x.png">');
+});

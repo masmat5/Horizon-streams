@@ -5,6 +5,10 @@ const nextConfig = {
   poweredByHeader: false,
   swcMinify: true,
   images: { domains: ['images.unsplash.com'] },
+  async redirects() {
+    // www.horizonstreamiptv.com served a full copy of the site; send it to the main address permanently
+    return [{ source: '/:path*', has: [{ type: 'host', value: 'www.horizonstreamiptv.com' }], destination: 'https://horizonstreamiptv.com/:path*', permanent: true }];
+  },
   async rewrites() {
     // Admin-uploaded images are streamed by an API route (files added after build are not served from /public)
     return [{ source: '/uploads/:name', destination: '/api/uploads/:name' }];
@@ -18,6 +22,7 @@ const nextConfig = {
           { key: 'X-Frame-Options', value: 'DENY' },
           { key: 'X-XSS-Protection', value: '1; mode=block' },
           { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
+          { key: 'Strict-Transport-Security', value: 'max-age=31536000' },
         ],
       },
     ];

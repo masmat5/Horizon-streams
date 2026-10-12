@@ -58,8 +58,8 @@ export default function Reseller() {
   return (
     <>
       <SEOHead
-        title="IPTV Reseller Panel 2026 — Buy IPTV Credits & Start an IPTV Business"
-        description="Become a HorizonStream IPTV reseller. High profit margins, instant reseller panel access, wholesale credit packages, and full technical support — get started on WhatsApp today."
+        title="IPTV Reseller Panel 2026 – Buy Credits, Start Selling"
+        description="Become an IPTV reseller: wholesale credits, instant panel access, high margins and full WhatsApp support. Start your own IPTV business today."
         keywords="IPTV reseller panel, best IPTV reseller panel, become IPTV reseller, IPTV reseller program, IPTV reseller Pakistan, IPTV reseller UK, buy IPTV credits, wholesale IPTV credits, IPTV panel for resellers, start IPTV business, sub reseller IPTV panel, StarShare reseller, Opplex reseller, B1G reseller, IPTV resell"
         canonical={`${SITE_URL}/reseller`}
         structuredData={[breadcrumbSchema, resellerServiceSchema]}
@@ -74,7 +74,7 @@ export default function Reseller() {
             <Link href="/">Home</Link><span>/</span><span>Reseller Panel</span>
           </nav>
           <div className="hero-badge"><span>💼</span>Reseller Programme</div>
-          <h1 className="hero-title">Start Your Own<br /><span className="gradient-text">IPTV Business</span></h1>
+          <h1 className="hero-title">Start Your Own{' '}<br /><span className="gradient-text">IPTV Business</span></h1>
           <p className="hero-desc">Become a HorizonStream IPTV reseller and earn consistent income. Get your own reseller panel, wholesale pricing, and full technical support — all through WhatsApp.</p>
           <button className="btn-wa" onClick={() => openWhatsApp('Hello HorizonStream IPTV! I am interested in becoming a reseller. Please share reseller panel details.')}>
             <WaIcon />Become a Reseller

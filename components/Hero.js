@@ -51,7 +51,7 @@ export default function Hero() {
           </div>
           
           <h1 className="hero-title" aria-label="Best IPTV Subscription 2026 - Stream Everything You Love">
-            Stream <span className="gradient-text">Everything</span><br />You Love
+            Stream <span className="gradient-text">Everything</span>{' '}<br />You Love
           </h1>
           <p className="hero-desc">The best IPTV subscription for Firestick, Smart TV, Android, iPhone and MAG box. Premium IPTV with StarShare, 5G Live, Opplex and elite 4K servers — 10,000+ live channels, movies and live sports in HD, 4K and 8K. Start with a free IPTV trial.</p>
           
