@@ -15,9 +15,9 @@ const benefits = [
 ];
 
 const packages = [
-  { name: 'Starter', credits: '10 Credits', price: 'PKR 6,500', perCredit: 'PKR 650 / credit', features: ['10 customer activations', 'All 21 servers', 'Panel access', 'WhatsApp support'], featured: false, waMsg: 'Hello HorizonStream IPTV! I want the Starter Reseller Package (10 Credits) for PKR 6,500.' },
-  { name: 'Growth', credits: '25 Credits', price: 'PKR 14,500', perCredit: 'PKR 580 / credit', features: ['25 customer activations', 'All 21 servers', 'Panel access', 'Priority support', 'Save PKR 1,750'], featured: true, waMsg: 'Hello HorizonStream IPTV! I want the Growth Reseller Package (25 Credits) for PKR 14,500.' },
-  { name: 'Pro', credits: '50 Credits', price: 'PKR 25,000', perCredit: 'PKR 500 / credit', features: ['50 customer activations', 'All 21 servers', 'Panel access', 'Priority support', 'Best margin'], featured: false, waMsg: 'Hello HorizonStream IPTV! I want the Pro Reseller Package (50 Credits) for PKR 25,000.' },
+  { name: 'Starter', credits: '10 Credits', price: '£18', perCredit: '£1.80 / credit', features: ['10 customer activations', 'All 21 servers', 'Panel access', 'WhatsApp support'], featured: false, waMsg: 'Hello HorizonStream IPTV! I want the Starter Reseller Package (10 Credits) for £18.' },
+  { name: 'Growth', credits: '25 Credits', price: '£40', perCredit: '£1.60 / credit', features: ['25 customer activations', 'All 21 servers', 'Panel access', 'Priority support', 'Save £5'], featured: true, waMsg: 'Hello HorizonStream IPTV! I want the Growth Reseller Package (25 Credits) for £40.' },
+  { name: 'Pro', credits: '50 Credits', price: '£70', perCredit: '£1.40 / credit', features: ['50 customer activations', 'All 21 servers', 'Panel access', 'Priority support', 'Best margin'], featured: false, waMsg: 'Hello HorizonStream IPTV! I want the Pro Reseller Package (50 Credits) for £70.' },
 ];
 
 const steps = [
@@ -49,8 +49,8 @@ const resellerServiceSchema = {
   offers: packages.map((p) => ({
     '@type': 'Offer',
     name: `${p.name} Reseller Package — ${p.credits}`,
-    price: p.price.replace(/[^\d]/g, ''),
-    priceCurrency: 'PKR',
+    price: p.price.replace(/[^\d.]/g, ''),
+    priceCurrency: 'GBP',
   })),
 };
 
